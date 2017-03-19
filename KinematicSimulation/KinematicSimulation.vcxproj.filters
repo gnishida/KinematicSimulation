@@ -74,6 +74,12 @@
     <ClCompile Include="Link.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SliderHinge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -106,6 +112,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Link.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderHinge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

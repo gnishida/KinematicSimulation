@@ -10,7 +10,6 @@
 #include "Link.h"
 
 namespace kinematics {
-	glm::dvec2 circleCircleIntersection(const glm::dvec2& center1, double radius1, const glm::dvec2& center2, double radius);
 	
 	/*
 	class Gear {

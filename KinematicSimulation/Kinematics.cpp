@@ -5,25 +5,10 @@
 #include <QTextStream>
 #include <QDate>
 #include "PinJoint.h"
+#include "SliderHinge.h"
 
 namespace kinematics {
 	float M_PI = 3.141592653;
-
-	glm::dvec2 circleCircleIntersection(const glm::dvec2& center1, double radius1, const glm::dvec2& center2, double radius2) {
-		glm::dvec2 dir = center2 - center1;
-		double d = glm::length(dir);
-		if (d > radius1 + radius2 || d < abs(radius1 - radius2)) {
-			throw "No intersection";
-		}
-
-		double a = (radius1 * radius1 - radius2 * radius2 + d * d) / d / 2.0;
-		double h = sqrtf(radius1 * radius1 - a * a);
-
-		glm::dvec2 perp(dir.y, -dir.x);
-		perp /= glm::length(perp);
-
-		return center1 + dir * a / d + perp * h;
-	}
 
 	/*
 	glm::dvec2 Gear::getLinkEndPosition() {
@@ -149,7 +134,10 @@ namespace kinematics {
 						int id = joint_node.toElement().attribute("id").toInt();
 						if (joint_node.toElement().attribute("type") == "pin") {
 							joints[id] = boost::shared_ptr<Joint>(new PinJoint(joint_node.toElement()));
-						}						
+						}
+						else if (joint_node.toElement().attribute("type") == "slider_hinge") {
+							joints[id] = boost::shared_ptr<Joint>(new SliderHinge(joint_node.toElement()));
+						}
 					}
 
 					joint_node = joint_node.nextSibling();
@@ -261,6 +249,11 @@ namespace kinematics {
 			}
 
 			node = node.nextSibling();
+		}
+		
+		// initialize joints
+		for (auto it = joints.begin(); it != joints.end(); ++it) {
+			it.value()->init(joints);
 		}
 
 		//trace_end_effector.resize(assemblies.size());
@@ -377,7 +370,7 @@ namespace kinematics {
 				queue.push_back(*it);
 			}
 
-			std::map<int, bool> updated;
+			QMap<int, bool> updated;
 			for (auto it = joints.begin(); it != joints.end(); ++it) {
 				updated[it.key()];
 			}
@@ -386,35 +379,12 @@ namespace kinematics {
 				boost::shared_ptr<Joint> joint = queue.front();
 				queue.pop_front();
 
-				// if no parent points, set this point as updated.
-				if (joint->in_links.size() == 0) {
+				if (joint->forwardKinematics(joints, updated)) {
 					updated[joint->id] = true;
-					continue;
-				}
-
-				if (joint->in_links.size() > 2) throw "forward kinematics error. Overconstrained.";
-
-				// if the parent points are not updated, postpone updating this point
-				boost::shared_ptr<Link> l1 = joint->in_links[0];
-				if (!updated[l1->start]) {
-					queue.push_back(joint);
-					continue;
-				}
-				if (joint->in_links.size() == 2) {
-					boost::shared_ptr<Link> l2 = joint->in_links[1];
-					if (!updated[l2->start]) {
-						queue.push_back(joint);
-						continue;
-					}
-
-					// update this point based on two adjacent points
-					joint->pos = circleCircleIntersection(joints[l1->start]->pos, l1->length, joints[l2->start]->pos, l2->length);
 				}
 				else {
-					// pin joint
-					joint->pos = l1->forwardKinematics(joints[l1->start]->pos);
+					queue.push_back(joint);
 				}
-				updated[joint->id] = true;
 			}
 		}
 		catch (char* ex) {

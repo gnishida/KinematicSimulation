@@ -1,4 +1,6 @@
 #include "PinJoint.h"
+#include "Link.h"
+#include "Utils.h"
 
 namespace kinematics {
 
@@ -11,6 +13,39 @@ namespace kinematics {
 		id = node.attribute("id").toInt();
 		pos.x = node.attribute("x").toFloat();
 		pos.y = node.attribute("y").toFloat();
+	}
+
+	void PinJoint::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
+	}
+
+	/**
+	 * Update the position of this joint.
+	 * Return true if the position is updated.
+	 * Return false if one of the positions of the parent nodes has not been updated yet.
+	 */
+	bool PinJoint::forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated) {
+		if (in_links.size() == 0) return true;
+
+		if (in_links.size() > 2) throw "forward kinematics error. Overconstrained.";
+
+		// if the parent points are not updated, postpone updating this point
+		boost::shared_ptr<Link> l1 = in_links[0];
+		if (!updated[l1->start]) {
+			return false;
+		}
+		if (in_links.size() == 2) {
+			boost::shared_ptr<Link> l2 = in_links[1];
+			if (!updated[l2->start]) {
+				return false;
+			}
+
+			// update this point based on two adjacent points
+			pos = circleCircleIntersection(joints[l1->start]->pos, l1->length, joints[l2->start]->pos, l2->length);
+		}
+		else {
+			// pin joint
+			pos = l1->forwardKinematics(joints[l1->start]->pos);
+		}
 	}
 
 }
