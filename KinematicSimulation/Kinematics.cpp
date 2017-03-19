@@ -6,6 +6,7 @@
 #include <QDate>
 #include "PinJoint.h"
 #include "SliderHinge.h"
+#include "Gear.h"
 
 namespace kinematics {
 	float M_PI = 3.141592653;
@@ -119,7 +120,6 @@ namespace kinematics {
 
 		// clear the data
 		joints.clear();
-		//assemblies.clear();
 		links.clear();
 		bodies.clear();
 		trace_end_effector.clear();
@@ -138,54 +138,15 @@ namespace kinematics {
 						else if (joint_node.toElement().attribute("type") == "slider_hinge") {
 							joints[id] = boost::shared_ptr<Joint>(new SliderHinge(joint_node.toElement()));
 						}
+						else if (joint_node.toElement().attribute("type") == "gear") {
+							joints[id] = boost::shared_ptr<Joint>(new Gear(joint_node.toElement()));
+						}
+
 					}
 
 					joint_node = joint_node.nextSibling();
 				}
 			}
-			/*
-			else if (node.toElement().tagName() == "assemblies") {
-				QDomNode assembly_node = node.firstChild();
-				while (!assembly_node.isNull()) {
-					if (assembly_node.toElement().tagName() == "assembly") {
-						// add an assembly
-						boost::shared_ptr<MechanicalAssembly> ass = boost::shared_ptr<MechanicalAssembly>(new MechanicalAssembly());
-
-						int end_effector_id = assembly_node.toElement().attribute("end_effector").toInt();
-						ass->end_effector = points[end_effector_id];
-
-						QDomNode assembly_part_node = assembly_node.firstChild();
-						while (!assembly_part_node.isNull()) {
-							if (assembly_part_node.toElement().tagName() == "gear") {
-								double x = assembly_part_node.toElement().attribute("x").toDouble();
-								double y = assembly_part_node.toElement().attribute("y").toFloat();
-								double radius = assembly_part_node.toElement().attribute("toDouble").toDouble();
-								double phase = assembly_part_node.toElement().attribute("phase").toDouble();
-								double speed = assembly_part_node.toElement().attribute("speed").toDouble();
-
-								ass->gears.push_back(Gear(glm::vec2(x, y), radius, phase, speed));
-							}
-							else if (assembly_part_node.toElement().tagName() == "order") {
-								int id1 = assembly_part_node.toElement().attribute("id1").toInt();
-								int id2 = assembly_part_node.toElement().attribute("id2").toInt();
-								ass->order = std::make_pair(id1, id2);
-							}
-							else if (assembly_part_node.toElement().tagName() == "link") {
-								double length = assembly_part_node.toElement().attribute("length").toFloat();
-								ass->link_lengths.push_back(length);
-							}
-
-							assembly_part_node = assembly_part_node.nextSibling();
-						}
-
-						ass->end_effector->pos = ass->getEndEffectorPosition();
-						assemblies.push_back(ass);
-					}
-
-					assembly_node = assembly_node.nextSibling();
-				}
-			}
-			*/
 			else if (node.toElement().tagName() == "links") {
 				QDomNode link_node = node.firstChild();
 				while (!link_node.isNull()) {
@@ -396,7 +357,12 @@ namespace kinematics {
 	void Kinematics::stepForward() {
 		for (int i = 0; i < links.size(); ++i) {
 			if (links[i]->driver) {
-				links[i]->stepForward(0.03);
+				if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
+					joints[links[i]->start]->stepForward(0.03);
+				}
+				else {
+					links[i]->stepForward(0.03);
+				}
 			}
 		}
 
@@ -406,7 +372,12 @@ namespace kinematics {
 		catch (char* ex) {
 			for (int i = 0; i < links.size(); ++i) {
 				if (links[i]->driver) {
-					links[i]->stepForward(-0.03);
+					if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
+						joints[links[i]->start]->stepForward(-0.03);
+					}
+					else {
+						links[i]->stepForward(-0.03);
+					}
 				}
 			}
 			throw ex;
@@ -416,7 +387,12 @@ namespace kinematics {
 	void Kinematics::stepBackward() {
 		for (int i = 0; i < links.size(); ++i) {
 			if (links[i]->driver) {
-				links[i]->stepForward(-0.03);
+				if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
+					joints[links[i]->start]->stepForward(-0.03);
+				}
+				else {
+					links[i]->stepForward(-0.03);
+				}
 			}
 		}
 
@@ -426,7 +402,12 @@ namespace kinematics {
 		catch (char* ex) {
 			for (int i = 0; i < links.size(); ++i) {
 				if (links[i]->driver) {
-					links[i]->stepForward(0.03);
+					if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
+						joints[links[i]->start]->stepForward(0.03);
+					}
+					else {
+						links[i]->stepForward(0.03);
+					}
 				}
 			}
 			throw ex;

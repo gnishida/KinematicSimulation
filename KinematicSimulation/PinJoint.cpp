@@ -6,13 +6,15 @@ namespace kinematics {
 
 	PinJoint::PinJoint(int id, const glm::dvec2& pos) {
 		this->id = id;
+		this->type = TYPE_PIN;
 		this->pos = pos;
 	}
 
 	PinJoint::PinJoint(QDomElement& node) {
 		id = node.attribute("id").toInt();
-		pos.x = node.attribute("x").toFloat();
-		pos.y = node.attribute("y").toFloat();
+		this->type = TYPE_PIN;
+		pos.x = node.attribute("x").toDouble();
+		pos.y = node.attribute("y").toDouble();
 	}
 
 	void PinJoint::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
@@ -24,6 +26,9 @@ namespace kinematics {
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
 		painter.drawEllipse(QPoint(pos.x, 800 - pos.y), 5, 5);
 		painter.restore();
+	}
+
+	void PinJoint::stepForward(double step_size) {
 	}
 
 	/**

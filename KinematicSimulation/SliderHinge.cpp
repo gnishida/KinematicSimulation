@@ -6,13 +6,15 @@ namespace kinematics {
 
 	SliderHinge::SliderHinge(int id, const glm::dvec2& pos) {
 		this->id = id;
+		this->type = TYPE_SLIDER_HINGE;
 		this->pos = pos;
 	}
 
 	SliderHinge::SliderHinge(QDomElement& node) {
 		id = node.attribute("id").toInt();
-		pos.x = node.attribute("x").toFloat();
-		pos.y = node.attribute("y").toFloat();
+		type = TYPE_SLIDER_HINGE;
+		pos.x = node.attribute("x").toDouble();
+		pos.y = node.attribute("y").toDouble();
 	}
 
 	void SliderHinge::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
@@ -36,6 +38,9 @@ namespace kinematics {
 
 		painter.drawEllipse(QPoint(0, 0), 5, 5);
 		painter.restore();
+	}
+
+	void SliderHinge::stepForward(double step_size) {
 	}
 
 	/**

@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="DrivingMechanism.cpp" />
+    <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_Canvas.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -216,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrivingMechanism.h" />
+    <ClInclude Include="Gear.h" />
     <ClInclude Include="Joint.h" />
     <ClInclude Include="Kinematics.h" />
     <ClInclude Include="Link.h" />

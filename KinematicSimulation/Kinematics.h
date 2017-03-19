@@ -11,40 +11,6 @@
 
 namespace kinematics {
 	
-	/*
-	class Gear {
-	public:
-		glm::dvec2 center;
-		double radius;
-		double phase;
-		double speed;
-
-	public:
-		Gear() {}
-		Gear(const glm::dvec2& center, double radius, double phase, double speed) : center(center), radius(radius), phase(phase), speed(speed) {}
-
-		glm::dvec2 getLinkEndPosition();
-		void draw(QPainter& painter);
-	};
-
-	class MechanicalAssembly {
-	public:
-		double phase;
-		std::vector<Gear> gears;
-		std::pair<int, int> order;
-		std::vector<double> link_lengths;
-		boost::shared_ptr<Joint> end_effector;
-
-	public:
-		MechanicalAssembly() : phase(3.14) {}
-
-		glm::dvec2 getIntermediateJointPosition();
-		glm::dvec2 getEndEffectorPosition();
-		void forward(double time_step);
-		void draw(QPainter& painter);
-	};
-	*/
-
 	class Body {
 	public:
 		int pivot1;
@@ -59,7 +25,6 @@ namespace kinematics {
 	public:
 		QMap<int, boost::shared_ptr<Joint>> joints;
 		std::vector<boost::shared_ptr<Link>> links;
-		//std::vector<boost::shared_ptr<MechanicalAssembly>> assemblies;
 		std::vector<Body> bodies;
 		std::vector<std::vector<glm::vec2>> trace_end_effector;
 

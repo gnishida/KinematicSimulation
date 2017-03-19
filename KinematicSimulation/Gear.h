@@ -5,13 +5,16 @@
 
 namespace kinematics {
 
-	class SliderHinge : public Joint {
+	class Gear : public Joint {
 	private:
-		double theta;
+		glm::dvec2 center;
+		double radius;
+		double speed;
+		double phase;
 
 	public:
-		SliderHinge(int id, const glm::dvec2& pos);
-		SliderHinge(QDomElement& node);
+		Gear(int id, const glm::dvec2& pos, double radius, double speed, double phase);
+		Gear(QDomElement& node);
 
 		void init(const QMap<int, boost::shared_ptr<Joint>>& joints);
 		void draw(QPainter& painter);
