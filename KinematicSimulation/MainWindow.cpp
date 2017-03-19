@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	connect(ui.actionSimulationStart, SIGNAL(triggered()), this, SLOT(onSimulationStart()));
 	connect(ui.actionSimulationStop, SIGNAL(triggered()), this, SLOT(onSimulationStop()));
+	connect(ui.actionStepForward, SIGNAL(triggered()), this, SLOT(onStepForward()));
+	connect(ui.actionStepBackward, SIGNAL(triggered()), this, SLOT(onStepBackward()));
 }
 
 MainWindow::~MainWindow() {
@@ -42,4 +44,12 @@ void MainWindow::onSimulationStart() {
 
 void MainWindow::onSimulationStop() {
 	canvas.stop();
+}
+
+void MainWindow::onStepForward() {
+	canvas.stepForward();
+}
+
+void MainWindow::onStepBackward() {
+	canvas.stepBackward();
 }

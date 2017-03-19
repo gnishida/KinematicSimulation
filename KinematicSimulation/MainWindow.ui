@@ -38,6 +38,8 @@
     </property>
     <addaction name="actionSimulationStart"/>
     <addaction name="actionSimulationStop"/>
+    <addaction name="actionStepForward"/>
+    <addaction name="actionStepBackward"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSimulation"/>
@@ -75,10 +77,32 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionStepForward">
+   <property name="text">
+    <string>Step Forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionStepBackward">
+   <property name="text">
+    <string>Step Backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
    </property>
   </action>
  </widget>

@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<design author="Gen Nishida" version="1.0" date="2/26/2017">
+	<joints>
+		<joint id="0" type="pin" x="267" y="364"/>
+		<joint id="1" type="pin" x="361" y="364"/>
+		<joint id="2" type="pin" x="468" y="364"/>
+		<joint id="3" type="pin" x="283" y="318"/>
+		<joint id="4" type="pin" x="330" y="276"/>
+		<joint id="5" type="pin" x="484" y="319"/>
+	</joints>
+	<links>
+		<link start="0" end="1" driver="true" order="0" />
+		<link start="0" end="2" driver="true" order="0" />
+		<link start="0" end="3" driver="false" order="0" />
+		<link start="3" end="5" driver="false" order="0" />
+		<link start="2" end="5" driver="false" order="1" />
+		<link start="3" end="4" driver="false" order="0" />
+		<link start="1" end="4" driver="false" order="1" />
+	</links>
+	<bodies>
+		<body id1="0" id2="2">
+			<point x="252" y="374"/>
+			<point x="515" y="374"/>
+			<point x="515" y="351"/>
+			<point x="252" y="351"/>
+		</body>
+		<body id1="0" id2="3">
+			<point x="198" y="525"/>
+			<point x="222" y="534"/>
+			<point x="299" y="307"/>
+			<point x="275" y="299"/>
+		</body>
+		<body id1="1" id2="4">
+			<point x="352" y="374"/>
+			<point x="377" y="367"/>
+			<point x="308" y="167"/>
+			<point x="284" y="178"/>
+		</body>
+		<body id1="2" id2="5">
+			<point x="453" y="364"/>
+			<point x="475" y="374"/>
+			<point x="552" y="176"/>
+			<point x="526" y="167"/>
+		</body>
+		<body id1="3" id2="4">
+			<point x="285" y="332"/>
+			<point x="344" y="277"/>
+			<point x="328" y="257"/>
+			<point x="270" y="312"/>
+		</body>
+		<body id1="3" id2="5">
+			<point x="272" y="325"/>
+			<point x="514" y="325"/>
+			<point x="514" y="308"/>
+			<point x="272" y="308"/>
+		</body>
+	</bodies>
+</design>

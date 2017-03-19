@@ -17,7 +17,7 @@ public:
 
 	kinematics::Kinematics kinematics;
 	QTimer* animation_timer;
-	kinematics::Gear* selected_gear;
+	//kinematics::Gear* selected_gear;
 	glm::vec2 prev_mouse_pt;
 
 public:
@@ -28,6 +28,8 @@ public:
 	void save(const QString& filename);
 	void run();
 	void stop();
+	void stepForward();
+	void stepBackward();
 	void showAssemblies(bool flag);
 	void showLinks(bool flag);
 	void showBodies(bool flag);

@@ -22,6 +22,8 @@ public slots:
 	void onSave();
 	void onSimulationStart();
 	void onSimulationStop();
+	void onStepForward();
+	void onStepBackward();
 };
 
 #endif // MAINWINDOW_H

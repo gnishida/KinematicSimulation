@@ -6,82 +6,62 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <boost/shared_ptr.hpp>
 #include <QMap>
+#include "Joint.h"
+#include "Link.h"
 
 namespace kinematics {
-	glm::vec2 circleCircleIntersection(const glm::vec2& center1, float radius1, const glm::vec2& center2, float radius);
-
-	class Link;
-
-	class Point {
-	public:
-		int id;
-		glm::vec2 pos;
-		std::vector<boost::shared_ptr<Link>> out_links;
-		std::vector<boost::shared_ptr<Link>> in_links;
-
-	public:
-		Point(int id, const glm::vec2& pos) : id(id), pos(pos) {}
-	};
-
-	class Link {
-	public:
-		int start;
-		int end;
-		float length;
-
-	public:
-		Link() {}
-		Link(int start_point, int end_point, float length);
-	};
-
+	glm::dvec2 circleCircleIntersection(const glm::dvec2& center1, double radius1, const glm::dvec2& center2, double radius);
+	
+	/*
 	class Gear {
 	public:
-		glm::vec2 center;
-		float radius;
-		float phase;
-		float speed;
+		glm::dvec2 center;
+		double radius;
+		double phase;
+		double speed;
 
 	public:
 		Gear() {}
-		Gear(const glm::vec2& center, float radius, float phase, float speed) : center(center), radius(radius), phase(phase), speed(speed) {}
+		Gear(const glm::dvec2& center, double radius, double phase, double speed) : center(center), radius(radius), phase(phase), speed(speed) {}
 
-		glm::vec2 getLinkEndPosition();
+		glm::dvec2 getLinkEndPosition();
 		void draw(QPainter& painter);
 	};
 
 	class MechanicalAssembly {
 	public:
-		float phase;
+		double phase;
 		std::vector<Gear> gears;
 		std::pair<int, int> order;
-		std::vector<float> link_lengths;
-		boost::shared_ptr<Point> end_effector;
+		std::vector<double> link_lengths;
+		boost::shared_ptr<Joint> end_effector;
 
 	public:
 		MechanicalAssembly() : phase(3.14) {}
 
-		glm::vec2 getIntermediateJointPosition();
-		glm::vec2 getEndEffectorPosition();
-		void forward(float time_step);
+		glm::dvec2 getIntermediateJointPosition();
+		glm::dvec2 getEndEffectorPosition();
+		void forward(double time_step);
 		void draw(QPainter& painter);
 	};
+	*/
 
-	class Part {
+	class Body {
 	public:
 		int pivot1;
 		int pivot2;
-		std::vector<glm::vec2> points;
+		std::vector<glm::dvec2> points;
 
 	public:
-		Part(int pivot1, int pivot2) : pivot1(pivot1), pivot2(pivot2) {}
+		Body(int pivot1, int pivot2) : pivot1(pivot1), pivot2(pivot2) {}
 	};
 
 	class Kinematics {
 	public:
-		QMap<int, boost::shared_ptr<Point>> points;
+		QMap<int, boost::shared_ptr<Joint>> joints;
 		std::vector<boost::shared_ptr<Link>> links;
-		std::vector<boost::shared_ptr<MechanicalAssembly>> assemblies;
-		std::vector<Part> bodies;
+		//std::vector<boost::shared_ptr<MechanicalAssembly>> assemblies;
+		std::vector<Body> bodies;
 		std::vector<std::vector<glm::vec2>> trace_end_effector;
 
 		bool show_assemblies;
