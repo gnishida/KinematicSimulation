@@ -222,7 +222,8 @@ namespace kinematics {
 						glm::vec2 dir = joints[id2]->pos - joints[id1]->pos;
 						double angle = atan2(dir.y, dir.x);
 						
-						glm::dvec2 p1 = (joints[id1]->pos + joints[id2]->pos) * 0.5;
+						//glm::dvec2 p1 = (joints[id1]->pos + joints[id2]->pos) * 0.5;
+						glm::dvec2 p1 = joints[id1]->pos;
 						glm::dmat4x4 model;
 						model = glm::rotate(model, -angle, glm::dvec3(0, 0, 1));						
 												
@@ -440,7 +441,8 @@ namespace kinematics {
 				painter.setBrush(QBrush(QColor(0, 255, 0, 60)));
 				glm::dvec2 dir = joints[bodies[i].pivot2]->pos - joints[bodies[i].pivot1]->pos;
 				double angle = atan2(-dir.y, dir.x) / M_PI * 180;
-				glm::dvec2 p1 = (joints[bodies[i].pivot1]->pos + joints[bodies[i].pivot2]->pos) * 0.5;
+				//glm::dvec2 p1 = (joints[bodies[i].pivot1]->pos + joints[bodies[i].pivot2]->pos) * 0.5;
+				glm::dvec2 p1 = joints[bodies[i].pivot1]->pos;
 				painter.translate(p1.x, 800 - p1.y);
 				painter.rotate(angle);
 				std::vector<QPointF> points;
@@ -479,8 +481,8 @@ namespace kinematics {
 			painter.setBrush(QBrush(QColor(255, 255, 255)));
 			for (int i = 0; i < links.size(); ++i) {
 				painter.drawLine(joints[links[i]->start]->pos.x, 800 - joints[links[i]->start]->pos.y, joints[links[i]->end]->pos.x, 800 - joints[links[i]->end]->pos.y);
-				painter.drawEllipse(QPoint(joints[links[i]->start]->pos.x, 800 - joints[links[i]->start]->pos.y), 3, 3);
-				painter.drawEllipse(QPoint(joints[links[i]->end]->pos.x, 800 - joints[links[i]->end]->pos.y), 3, 3);
+				joints[links[i]->start]->draw(painter);
+				joints[links[i]->end]->draw(painter);
 			}
 		}
 	}

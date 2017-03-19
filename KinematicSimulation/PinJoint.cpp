@@ -18,6 +18,14 @@ namespace kinematics {
 	void PinJoint::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
 	}
 
+	void PinJoint::draw(QPainter& painter) {
+		painter.save();
+		painter.setPen(QPen(QColor(0, 0, 0), 1));
+		painter.setBrush(QBrush(QColor(255, 255, 255)));
+		painter.drawEllipse(QPoint(pos.x, 800 - pos.y), 5, 5);
+		painter.restore();
+	}
+
 	/**
 	 * Update the position of this joint.
 	 * Return true if the position is updated.

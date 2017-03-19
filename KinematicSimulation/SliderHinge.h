@@ -14,6 +14,7 @@ namespace kinematics {
 		SliderHinge(QDomElement& node);
 
 		void init(const QMap<int, boost::shared_ptr<Joint>>& joints);
+		void draw(QPainter& painter);
 		bool forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated);
 	};
 

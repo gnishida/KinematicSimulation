@@ -4,6 +4,7 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <QMap>
+#include <QPainter>
 
 namespace kinematics {
 
@@ -18,6 +19,7 @@ namespace kinematics {
 
 	public:
 		virtual void init(const QMap<int, boost::shared_ptr<Joint>>& joints) = 0;
+		virtual void draw(QPainter& painter) = 0;
 		virtual bool forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated) = 0;
 	};
 
