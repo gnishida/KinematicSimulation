@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <design author="Gen Nishida" version="1.0" date="2/26/2017">
 	<joints>
-		<joint id="0" type="gear" x="325" y="560" radius="14.866" phase="0.721" speed="1"/>
-		<joint id="1" type="gear" x="392" y="544" radius="17.263" phase="3.318" speed="-1"/>
-		<joint id="2" type="pin" x="293.98" y="508.655"/>
-		<joint id="3" type="pin" x="262" y="473"/>
+		<joint id="0" type="gear" x="325" y="560" radius="14.866" phase="-0.721" speed="-1"/>
+		<joint id="1" type="gear" x="392" y="544" radius="17.263" phase="-3.318" speed="1"/>
+		<joint id="2" type="pin" x="291.689" y="505.659"/>
+		<joint id="3" type="pin" x="260.69" y="474.626"/>
 		<joint id="4" type="pin" x="278" y="558"/>
 		<joint id="5" type="pin" x="213" y="485"/>
 		<joint id="6" type="pin" x="222" y="522"/>

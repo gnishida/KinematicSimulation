@@ -7,10 +7,9 @@
 #include "PinJoint.h"
 #include "SliderHinge.h"
 #include "Gear.h"
+#include "Utils.h"
 
 namespace kinematics {
-	float M_PI = 3.141592653;
-
 	/*
 	glm::dvec2 Gear::getLinkEndPosition() {
 		return center + glm::dvec2(cos(phase), sin(phase)) * radius;

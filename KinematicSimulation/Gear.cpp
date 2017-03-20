@@ -31,8 +31,31 @@ namespace kinematics {
 	void Gear::draw(QPainter& painter) {
 		painter.save();
 		painter.setPen(QPen(QColor(0, 0, 0), 1));
+		painter.setBrush(QBrush(QColor(255, 255, 255, 0)));
+		painter.drawEllipse(QPoint(center.x, 800 - center.y), 5, 5);
+
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
+
+		int num_split = radius * 0.6;
+		for (int i = 0; i < num_split; ++i) {
+			float theta1 = i * M_PI * 2.0 / num_split;
+			float theta2 = (i + 0.5) * M_PI * 2.0 / num_split;
+			float theta3 = (i + 1) * M_PI * 2.0 / num_split;
+
+			glm::vec2 p1 = center + glm::dvec2(cos(phase + theta1), sin(phase + theta1)) * (radius + 4);
+			glm::vec2 p2 = center + glm::dvec2(cos(phase + theta2), sin(phase + theta2)) * (radius + 4);
+			glm::vec2 p3 = center + glm::dvec2(cos(phase + theta2), sin(phase + theta2)) * radius;
+			glm::vec2 p4 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * radius;
+			glm::vec2 p5 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * (radius + 4);
+
+			painter.drawLine(p1.x, 800 - p1.y, p2.x, 800 - p2.y);
+			painter.drawLine(p2.x, 800 - p2.y, p3.x, 800 - p3.y);
+			painter.drawLine(p3.x, 800 - p3.y, p4.x, 800 - p4.y);
+			painter.drawLine(p4.x, 800 - p4.y, p5.x, 800 - p5.y);
+		}
+		
 		painter.drawEllipse(QPoint(pos.x, 800 - pos.y), 5, 5);
+				
 		painter.restore();
 	}
 
