@@ -18,9 +18,8 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	shiftPressed = false;
 
 	animation_timer = NULL;
-	//selected_gear = NULL;
+	simulation_speed = 0.01;
 	
-	//ass->forward(1.5);
 	try {
 		kinematics.forwardKinematics();
 	}
@@ -61,10 +60,10 @@ void Canvas::stop() {
 void Canvas::stepForward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepForward();
+			kinematics.stepForward(simulation_speed);
 		}
 		catch (char* ex) {
-			//kinematics.stepBackward();
+			simulation_speed = -simulation_speed;
 			std::cerr << "Animation is stopped by error:" << std::endl;
 			std::cerr << ex << std::endl;
 		}
@@ -75,10 +74,10 @@ void Canvas::stepForward() {
 void Canvas::stepBackward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepBackward();
+			kinematics.stepForward(-simulation_speed);
 		}
 		catch (char* ex) {
-			//kinematics.stepForward();
+			simulation_speed = -simulation_speed;
 			std::cerr << "Animation is stopped by error:" << std::endl;
 			std::cerr << ex << std::endl;
 		}
@@ -103,11 +102,11 @@ void Canvas::showBodies(bool flag) {
 
 void Canvas::animation_update() {
 	try {
-		kinematics.stepForward();
+		kinematics.stepForward(simulation_speed);
 	}
 	catch (char* ex) {
-		//kinematics.stepBackward();
-		stop();
+		simulation_speed = -simulation_speed;
+		//stop();
 		std::cerr << "Animation is stopped by error:" << std::endl;
 		std::cerr << ex << std::endl;
 	}

@@ -10,97 +10,6 @@
 #include "Utils.h"
 
 namespace kinematics {
-	/*
-	glm::dvec2 Gear::getLinkEndPosition() {
-		return center + glm::dvec2(cos(phase), sin(phase)) * radius;
-	}
-	*/
-
-	/**
-	 * Draw a gear.
-	 */
-	/*
-	void Gear::draw(QPainter& painter) {
-		painter.setPen(QPen(QColor(255, 0, 0), 1));
-
-		painter.drawEllipse(QPoint(center.x, center.y), 4, 4);
-
-		int num_split = radius * 0.4;
-		for (int i = 0; i < num_split; ++i) {
-			float theta1 = i * M_PI * 2.0 / num_split;
-			float theta2 = (i + 0.5) * M_PI * 2.0 / num_split;
-			float theta3 = (i + 1) * M_PI * 2.0 / num_split;
-
-			glm::dvec2 p1 = center + glm::dvec2(cos(phase + theta1), sin(phase + theta1)) * (radius + 5);
-			glm::dvec2 p2 = center + glm::dvec2(cos(phase + theta2), sin(phase + theta2)) * (radius + 5);
-			glm::dvec2 p3 = center + glm::dvec2(cos(phase + theta2), sin(phase + theta2)) * radius;
-			glm::dvec2 p4 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * radius;
-			glm::dvec2 p5 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * (radius + 5);
-
-			painter.drawLine(p1.x, p1.y, p2.x, p2.y);
-			painter.drawLine(p2.x, p2.y, p3.x, p3.y);
-			painter.drawLine(p3.x, p3.y, p4.x, p4.y);
-			painter.drawLine(p4.x, p4.y, p5.x, p5.y);
-		}
-	}
-
-	glm::dvec2 MechanicalAssembly::getIntermediateJointPosition() {
-		glm::dvec2 p1 = gears[order.first].getLinkEndPosition();
-		glm::dvec2 p2 = gears[order.second].getLinkEndPosition();
-
-		return circleCircleIntersection(p1, link_lengths[order.first], p2, link_lengths[order.second]);
-	}
-
-	glm::dvec2 MechanicalAssembly::getEndEffectorPosition() {
-		glm::dvec2 p1 = gears[order.first].getLinkEndPosition();
-		glm::dvec2 p2 = gears[order.second].getLinkEndPosition();
-
-		glm::dvec2 joint = circleCircleIntersection(p1, link_lengths[order.first], p2, link_lengths[order.second]);
-		glm::dvec2 dir = joint - gears[0].getLinkEndPosition();
-
-		return gears[0].getLinkEndPosition() + dir / link_lengths[0] * (link_lengths[0] + link_lengths[2]);
-	}
-
-	void MechanicalAssembly::forward(double time_step) {
-		phase += time_step;
-		if (phase > M_PI * 2) phase -= M_PI * 2;
-		if (phase < 0) phase += M_PI * 2;
-
-		for (int i = 0; i < gears.size(); ++i) {
-			gears[i].phase += gears[i].speed * time_step;
-			if (gears[i].phase > M_PI * 2) gears[i].phase -= M_PI * 2;
-			if (gears[i].phase < 0) gears[i].phase += M_PI * 2;
-		}
-				
-		end_effector->pos = getEndEffectorPosition();
-	}
-
-	void MechanicalAssembly::draw(QPainter& painter) {
-		glm::dvec2 p1 = gears[0].getLinkEndPosition();
-		glm::dvec2 p2 = gears[1].getLinkEndPosition();
-		glm::dvec2 intP = getIntermediateJointPosition();
-		glm::dvec2 endP = getEndEffectorPosition();
-
-		// draw gears
-		for (int i = 0; i < gears.size(); ++i) {
-			gears[i].draw(painter);
-		}
-
-		// draw links
-		painter.setPen(QPen(QColor(0, 0, 255), 3));
-		painter.setBrush(QBrush(QColor(255, 255, 255)));
-		painter.drawLine(p1.x, p1.y, endP.x, endP.y);
-		painter.drawLine(p2.x, p2.y, intP.x, intP.y);
-
-		// draw joints
-		painter.setPen(QPen(QColor(0, 0, 255), 3));
-		painter.drawEllipse(QPoint(p1.x, p1.y), 3, 3);
-		painter.drawEllipse(QPoint(p2.x, p2.y), 3, 3);
-		painter.drawEllipse(QPoint(intP.x, intP.y), 3, 3);
-		painter.drawEllipse(QPoint(endP.x, endP.y), 3, 3);
-	}
-	*/
-
 	Kinematics::Kinematics() {
 		show_assemblies = true;
 		show_links = true;
@@ -244,43 +153,6 @@ namespace kinematics {
 			points_node.appendChild(point_node);
 		}
 
-		// write assemblies
-		/*
-		QDomElement assemblies_node = doc.createElement("assemblies");
-		root.appendChild(assemblies_node);
-		for (int i = 0; i < assemblies.size(); ++i) {
-			QDomElement assembly_node = doc.createElement("assembly");
-			assembly_node.setAttribute("end_effector", assemblies[i]->end_effector->id);
-
-			// write gears
-			for (int j = 0; j < assemblies[i]->gears.size(); ++j) {
-				QDomElement gear_node = doc.createElement("gear");
-				gear_node.setAttribute("x", assemblies[i]->gears[j].center.x);
-				gear_node.setAttribute("y", assemblies[i]->gears[j].center.y);
-				gear_node.setAttribute("radius", assemblies[i]->gears[j].radius);
-				gear_node.setAttribute("phase", assemblies[i]->gears[j].phase);
-				gear_node.setAttribute("speed", assemblies[i]->gears[j].speed);
-				
-				assembly_node.appendChild(gear_node);
-			}
-
-			// write order
-			QDomElement order_node = doc.createElement("order");
-			order_node.setAttribute("id1", assemblies[i]->order.first);
-			order_node.setAttribute("id2", assemblies[i]->order.second);
-			assembly_node.appendChild(order_node);
-
-			// write links
-			for (int j = 0; j < assemblies[i]->link_lengths.size(); ++j) {
-				QDomElement link_node = doc.createElement("link");
-				link_node.setAttribute("length", assemblies[i]->link_lengths[j]);
-				assembly_node.appendChild(link_node);
-			}
-
-			assemblies_node.appendChild(assembly_node);
-		}
-		*/
-
 		// write links
 		QDomElement links_node = doc.createElement("links");
 		root.appendChild(links_node);
@@ -353,14 +225,14 @@ namespace kinematics {
 		}
 	}
 
-	void Kinematics::stepForward() {
+	void Kinematics::stepForward(double time_step) {
 		for (int i = 0; i < links.size(); ++i) {
 			if (links[i]->driver) {
 				if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
-					joints[links[i]->start]->stepForward(0.03);
+					joints[links[i]->start]->stepForward(time_step);
 				}
 				else {
-					links[i]->stepForward(0.03);
+					links[i]->stepForward(time_step);
 				}
 			}
 		}
@@ -372,40 +244,10 @@ namespace kinematics {
 			for (int i = 0; i < links.size(); ++i) {
 				if (links[i]->driver) {
 					if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
-						joints[links[i]->start]->stepForward(-0.03);
+						joints[links[i]->start]->stepForward(-time_step);
 					}
 					else {
-						links[i]->stepForward(-0.03);
-					}
-				}
-			}
-			throw ex;
-		}
-	}
-
-	void Kinematics::stepBackward() {
-		for (int i = 0; i < links.size(); ++i) {
-			if (links[i]->driver) {
-				if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
-					joints[links[i]->start]->stepForward(-0.03);
-				}
-				else {
-					links[i]->stepForward(-0.03);
-				}
-			}
-		}
-
-		try {
-			forwardKinematics();
-		}
-		catch (char* ex) {
-			for (int i = 0; i < links.size(); ++i) {
-				if (links[i]->driver) {
-					if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
-						joints[links[i]->start]->stepForward(0.03);
-					}
-					else {
-						links[i]->stepForward(0.03);
+						links[i]->stepForward(-time_step);
 					}
 				}
 			}
@@ -433,27 +275,6 @@ namespace kinematics {
 				painter.restore();
 			}
 		}
-
-#if 0
-		if (show_assemblies) {
-			// draw trace
-			painter.setPen(QPen(QColor(255, 0, 0), 1));
-			for (int i = 0; i < trace_end_effector.size(); ++i) {
-				if (trace_end_effector[i].size() > 0) {
-					for (int j = std::max(0, (int)trace_end_effector[i].size() - 240); j < trace_end_effector[i].size() - 1; ++j) {
-						painter.drawLine(trace_end_effector[i][j].x, trace_end_effector[i][j].y, trace_end_effector[i][j + 1].x, trace_end_effector[i][j + 1].y);
-					}
-				}
-			}
-
-			// draw assembly
-			/*
-			for (int i = 0; i < assemblies.size(); ++i) {
-				assemblies[i]->draw(painter);
-			}
-			*/
-		}
-#endif
 
 		if (show_links) {
 			// draw links

@@ -38,7 +38,7 @@ namespace kinematics {
 		void load(const QString& filename);
 		void save(const QString& filename);
 		void forwardKinematics();
-		void stepForward();
+		void stepForward(double time_step);
 		void stepBackward();
 		void draw(QPainter& painter);
 		void showAssemblies(bool flag);
