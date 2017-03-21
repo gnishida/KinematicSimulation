@@ -6,7 +6,15 @@ namespace kinematics {
 		glm::dvec2 dir = center2 - center1;
 		double d = glm::length(dir);
 		if (d > radius1 + radius2 || d < abs(radius1 - radius2)) {
-			throw "No intersection";
+			if (d <= radius1 + radius2 + TOL && d > radius1 + radius2) {
+				d = radius1 + radius2;
+			}
+			else if (d >= abs(radius1 - radius2) - TOL && d < abs(radius1 - radius2)) {
+				d = abs(radius1 - radius2);
+			}
+			else {
+				throw "No intersection";
+			}
 		}
 
 		double a = (radius1 * radius1 - radius2 * radius2 + d * d) / d / 2.0;

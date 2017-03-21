@@ -12,16 +12,6 @@
 		<joint id="8" type="pin" x="133" y="478"/>
 		<joint id="9" type="pin" x="101" y="374"/>
 	</joints>
-	<assemblies>
-		<assembly end_effector="0">
-			<gear x="325" y="240" radius="14.866" phase="0.721" speed="1"/>
-			<gear x="392" y="256" radius="17.263" phase="3.318" speed="-1"/>
-			<order id1="0" id2="1"/>
-			<link length="62.936"/>
-			<link length="93.022"/>
-			<link length="43.863"/>
-		</assembly>
-	</assemblies>
 	<links>
 		<link driver="true" order="0" start="0" end="2"/>
 		<link driver="true" order="1" start="1" end="2"/>

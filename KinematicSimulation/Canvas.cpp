@@ -18,7 +18,7 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	shiftPressed = false;
 
 	animation_timer = NULL;
-	simulation_speed = 0.01;
+	simulation_speed = 0.02;
 	
 	try {
 		kinematics.forwardKinematics();

@@ -5,6 +5,7 @@
 #include <boost/shared_ptr.hpp>
 #include <QMap>
 #include <QPainter>
+#include <iostream>
 
 namespace kinematics {
 
