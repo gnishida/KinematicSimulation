@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<design author="Gen Nishida" version="1.0" date="3/22/2017">
+	<joints>
+		<joint id="0" type="pin" ground="true" driver="true" x="487" y="482"/>
+		<joint id="1" type="pin" x="479" y="522"/>
+		<joint id="2" type="pin" x="349" y="569"/>
+		<joint id="3" type="pin" ground="true" x="382" y="459"/>
+		<joint id="4" type="pin" x="274" y="435"/>
+		<joint id="5" type="pin" x="324" y="339"/>
+		<joint id="6" type="pin" x="424" y="359"/>
+		<joint id="7" type="pin" x="473" y="234"/>
+	</joints>
+	<links>
+		<link joints="0,1" driver="true"/>
+		<link joints="1,2"/>
+		<link joints="1,6"/>		
+		<link joints="2,3,4"/>
+		<link joints="3,6"/>
+		<link joints="4,5"/>
+		<link joints="5,6,7"/>
+	</links>
+</design>

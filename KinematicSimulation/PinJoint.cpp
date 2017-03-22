@@ -58,7 +58,7 @@ namespace kinematics {
 		// If one of the links has its position already determined,
 		// then use it to determine the position of this joint.
 		for (int i = 0; i < links.size(); ++i) {
-			if (links[i]->determined) {
+			if (links[i]->isDetermined()) {
 				// calculate the position of this joint based on the joints whose position has already been determined.
 				pos = links[i]->transformByDeterminedJoints(id);
 				determined = true;

@@ -8,6 +8,16 @@ namespace kinematics {
 		this->driver = driver;
 	}
 
+	bool Link::isDetermined() {
+		int count = 0;
+		for (int i = 0; i < joints.size(); ++i) {
+			if (joints[i]->determined) count++;
+		}
+
+		if (count >= 2) return true;
+		else return false;
+	}
+
 	void Link::addJoint(boost::shared_ptr<Joint> joint) {
 		joints.push_back(joint);
 		original_shape[joint->id] = joint->pos;
@@ -17,7 +27,6 @@ namespace kinematics {
 		for (int i = 0; i < joints.size(); ++i) {
 			joints[i]->rotate(rotation_center, angle);
 		}
-		determined = true;
 	}
 
 	double Link::getLength(int joint_id1, int joint_id2) {

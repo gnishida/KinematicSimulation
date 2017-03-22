@@ -203,25 +203,26 @@ namespace kinematics {
 	}
 
 	void Kinematics::forwardKinematics() {
-		try {
-			std::list<boost::shared_ptr<Joint>> queue;
+		std::list<boost::shared_ptr<Joint>> queue;
 
-			// put the joints whose position has not been determined into the queue
-			for (auto it = joints.begin(); it != joints.end(); ++it) {
-				if (!joints[it.key()]->determined) queue.push_back(joints[it.key()]);
-			}
-
-			while (!queue.empty()) {
-				boost::shared_ptr<Joint> joint = queue.front();
-				queue.pop_front();
-
-				if (!joint->forwardKinematics()) {
-					queue.push_back(joint);
-				}
-			}
+		// put the joints whose position has not been determined into the queue
+		for (auto it = joints.begin(); it != joints.end(); ++it) {
+			if (!joints[it.key()]->determined) queue.push_back(joints[it.key()]);
 		}
-		catch (char* ex) {
-			throw "forward kinematics error.";
+
+		int count = 0;
+		while (!queue.empty()) {
+			boost::shared_ptr<Joint> joint = queue.front();
+			queue.pop_front();
+
+			if (!joint->forwardKinematics()) {
+				queue.push_back(joint);
+			}
+
+			count++;
+			if (count > 1000) {
+				throw "infinite loop is detected.";
+			}
 		}
 	}
 
@@ -229,7 +230,7 @@ namespace kinematics {
 		// save the current state
 		saveState();
 
-		// clear the determined flag of joints and links
+		// clear the determined flag of joints
 		for (auto it = joints.begin(); it != joints.end(); ++it) {
 			if (joints[it.key()]->ground) {
 				joints[it.key()]->determined = true;
@@ -237,9 +238,6 @@ namespace kinematics {
 			else {
 				joints[it.key()]->determined = false;
 			}
-		}
-		for (int i = 0; i < links.size(); ++i) {
-			links[i]->determined = false;
 		}
 
 		// update the positions of the joints by the driver
