@@ -18,7 +18,7 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	shiftPressed = false;
 
 	animation_timer = NULL;
-	simulation_speed = 0.02;
+	simulation_speed = 0.01;
 	
 	try {
 		kinematics.forwardKinematics();
@@ -34,6 +34,11 @@ Canvas::~Canvas() {
 
 void Canvas::open(const QString& filename) {
 	kinematics.load(filename);
+
+	// Since the direction of the speed might be inverted due to the dead zone,
+	// we need to recover the original speed when a new object is loaded.
+	simulation_speed = 0.01;
+
 	update();
 }
 
@@ -55,6 +60,14 @@ void Canvas::stop() {
 		delete animation_timer;
 		animation_timer = NULL;
 	}
+}
+
+void Canvas::speedUp() {
+	simulation_speed *= 2;
+}
+
+void Canvas::speedDown() {
+	simulation_speed *= 0.5;
 }
 
 void Canvas::stepForward() {

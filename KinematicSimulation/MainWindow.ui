@@ -38,6 +38,9 @@
     </property>
     <addaction name="actionSimulationStart"/>
     <addaction name="actionSimulationStop"/>
+    <addaction name="actionSpeedUp"/>
+    <addaction name="actionSpeedDown"/>
+    <addaction name="separator"/>
     <addaction name="actionStepForward"/>
     <addaction name="actionStepBackward"/>
    </widget>
@@ -103,6 +106,22 @@
    </property>
    <property name="shortcut">
     <string>Left</string>
+   </property>
+  </action>
+  <action name="actionSpeedUp">
+   <property name="text">
+    <string>Speed Up</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionSpeedDown">
+   <property name="text">
+    <string>Speed Down</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
    </property>
   </action>
  </widget>

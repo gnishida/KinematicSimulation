@@ -28,6 +28,8 @@ public:
 	void save(const QString& filename);
 	void run();
 	void stop();
+	void speedUp();
+	void speedDown();
 	void stepForward();
 	void stepBackward();
 	void showAssemblies(bool flag);

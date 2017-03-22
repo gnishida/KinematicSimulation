@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BodyGeometry.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="DrivingMechanism.cpp" />
     <ClCompile Include="Gear.cpp" />
@@ -216,6 +217,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BodyGeometry.h" />
     <ClInclude Include="DrivingMechanism.h" />
     <ClInclude Include="Gear.h" />
     <ClInclude Include="Joint.h" />

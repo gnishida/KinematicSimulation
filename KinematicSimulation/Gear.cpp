@@ -4,7 +4,7 @@
 
 namespace kinematics {
 
-	Gear::Gear(int id, const glm::dvec2& center, double radius, double speed, double phase) {
+	Gear::Gear(int id, const glm::dvec2& center, double radius, double speed, double phase) : Joint() {
 		this->id = id;
 		this->type = TYPE_GEAR;
 		this->center = center;
@@ -14,9 +14,11 @@ namespace kinematics {
 		this->pos = center + glm::dvec2(cos(phase), sin(phase)) * radius;
 	}
 
-	Gear::Gear(QDomElement& node) {
+	Gear::Gear(QDomElement& node) : Joint() {
 		id = node.attribute("id").toInt();
 		type = TYPE_GEAR;
+		this->driver = node.attribute("driver").toLower() == "true";
+		this->ground = node.attribute("ground").toLower() == "true";
 		center.x = node.attribute("x").toDouble();
 		center.y = node.attribute("y").toDouble();
 		radius = node.attribute("radius").toDouble();
@@ -25,7 +27,14 @@ namespace kinematics {
 		pos = center + glm::dvec2(cos(phase), sin(phase)) * radius;
 	}
 
-	void Gear::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
+	void Gear::saveState() {
+		prev_pos = pos;
+		prev_phase = phase;
+	}
+
+	void Gear::restoreState() {
+		pos = prev_pos;
+		phase = prev_phase;
 	}
 
 	void Gear::draw(QPainter& painter) {
@@ -61,6 +70,8 @@ namespace kinematics {
 
 	void Gear::stepForward(double step_size) {
 		phase += speed * step_size;
+		pos = center + glm::dvec2(cos(phase), sin(phase)) * radius;
+		determined = true;
 	}
 
 	/**
@@ -68,8 +79,9 @@ namespace kinematics {
 	* Return true if the position is updated.
 	* Return false if one of the positions of the parent nodes has not been updated yet.
 	*/
-	bool Gear::forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated) {
+	bool Gear::forwardKinematics() {
 		pos = center + glm::dvec2(cos(phase), sin(phase)) * radius;
+		determined = true;
 		return true;
 	}
 

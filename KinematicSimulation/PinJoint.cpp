@@ -4,20 +4,27 @@
 
 namespace kinematics {
 
-	PinJoint::PinJoint(int id, const glm::dvec2& pos) {
+	PinJoint::PinJoint(int id, const glm::dvec2& pos) : Joint() {
 		this->id = id;
 		this->type = TYPE_PIN;
 		this->pos = pos;
 	}
 
-	PinJoint::PinJoint(QDomElement& node) {
+	PinJoint::PinJoint(QDomElement& node) : Joint() {
 		id = node.attribute("id").toInt();
 		this->type = TYPE_PIN;
+		this->driver = node.attribute("driver").toLower() == "true";
+		this->ground = node.attribute("ground").toLower() == "true";
 		pos.x = node.attribute("x").toDouble();
 		pos.y = node.attribute("y").toDouble();
 	}
 
-	void PinJoint::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
+	void PinJoint::saveState() {
+		prev_pos = pos;
+	}
+
+	void PinJoint::restoreState() {
+		pos = prev_pos;
 	}
 
 	void PinJoint::draw(QPainter& painter) {
@@ -29,6 +36,12 @@ namespace kinematics {
 	}
 
 	void PinJoint::stepForward(double step_size) {
+		for (int i = 0; i < links.size(); ++i) {
+			if (links[i]->driver) {
+				links[i]->rotate(pos, step_size);
+			}
+		}
+		determined = true;
 	}
 
 	/**
@@ -36,29 +49,49 @@ namespace kinematics {
 	 * Return true if the position is updated.
 	 * Return false if one of the positions of the parent nodes has not been updated yet.
 	 */
-	bool PinJoint::forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated) {
-		if (in_links.size() == 0) return true;
+	bool PinJoint::forwardKinematics() {
+		if (links.size() == 0) {
+			determined = true;
+			return true;
+		}
 
-		if (in_links.size() > 2) throw "forward kinematics error. Overconstrained.";
+		// If one of the links has its position already determined,
+		// then use it to determine the position of this joint.
+		for (int i = 0; i < links.size(); ++i) {
+			if (links[i]->determined) {
+				// calculate the position of this joint based on the joints whose position has already been determined.
+				pos = links[i]->transformByDeterminedJoints(id);
+				determined = true;
+				return true;
+			}
+		}
 
-		// if the parent points are not updated, postpone updating this point
-		boost::shared_ptr<Link> l1 = in_links[0];
-		if (!updated[l1->start]) {
+		// If two of the links have at least one joint with its position determined,
+		// then use them to determine the position of this joint.
+		std::vector<glm::dvec2> positions;
+		std::vector<double> lengths;
+		for (int i = 0; i < links.size(); ++i) {
+			for (int j = 0; j < links[i]->joints.size(); ++j) {
+				if (links[i]->joints[j]->determined) {
+					positions.push_back(links[i]->joints[j]->pos);
+					lengths.push_back(links[i]->getLength(links[i]->joints[j]->id, id));
+				}
+			}
+		}
+		if (positions.size() == 2) {
+			pos = circleCircleIntersection(positions[0], lengths[0], positions[1], lengths[1], pos);
+			determined = true;
+			return true;
+		}
+		else if (positions.size() < 2) {
 			return false;
 		}
-		if (in_links.size() == 2) {
-			boost::shared_ptr<Link> l2 = in_links[1];
-			if (!updated[l2->start]) {
-				return false;
-			}
+		else if (positions.size() > 2) {
+			throw "Over constrained";
+		}
 
-			// update this point based on two adjacent points
-			pos = circleCircleIntersection(joints[l1->start]->pos, l1->length, joints[l2->start]->pos, l2->length);
-		}
-		else {
-			// pin joint
-			pos = l1->forwardKinematics(joints[l1->start]->pos);
-		}
+		// Otherwise, postpone updating the position later.
+		return false;
 	}
 
 }

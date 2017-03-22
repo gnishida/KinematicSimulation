@@ -83,6 +83,9 @@
     <ClCompile Include="Gear.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BodyGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -124,6 +127,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gear.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BodyGeometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

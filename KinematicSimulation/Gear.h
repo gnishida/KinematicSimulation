@@ -11,15 +11,17 @@ namespace kinematics {
 		double radius;
 		double speed;
 		double phase;
+		double prev_phase;
 
 	public:
 		Gear(int id, const glm::dvec2& pos, double radius, double speed, double phase);
 		Gear(QDomElement& node);
 
-		void init(const QMap<int, boost::shared_ptr<Joint>>& joints);
+		void saveState();
+		void restoreState();
 		void draw(QPainter& painter);
 		void stepForward(double step_size);
-		bool forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated);
+		bool forwardKinematics();
 	};
 
 }

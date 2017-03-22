@@ -4,33 +4,42 @@
 
 namespace kinematics {
 
-	SliderHinge::SliderHinge(int id, const glm::dvec2& pos) {
+	SliderHinge::SliderHinge(int id, const glm::dvec2& pos) : Joint() {
 		this->id = id;
 		this->type = TYPE_SLIDER_HINGE;
 		this->pos = pos;
 	}
 
-	SliderHinge::SliderHinge(QDomElement& node) {
+	SliderHinge::SliderHinge(QDomElement& node) : Joint() {
 		id = node.attribute("id").toInt();
 		type = TYPE_SLIDER_HINGE;
+		this->driver = node.attribute("driver").toLower() == "true";
+		this->ground = node.attribute("ground").toLower() == "true";
 		pos.x = node.attribute("x").toDouble();
 		pos.y = node.attribute("y").toDouble();
 	}
 
-	void SliderHinge::init(const QMap<int, boost::shared_ptr<Joint>>& joints) {
-		if (in_links.size() > 0) {
-			glm::dvec2 pt = joints[in_links[0]->start]->pos;
-			theta = atan2(pt.y - pos.y, pt.x - pos.x);
-		}
-		else {
-			theta = 0;
-		}
+	void SliderHinge::saveState() {
+		prev_pos = pos;
+	}
+
+	void SliderHinge::restoreState() {
+		pos = prev_pos;
 	}
 
 	void SliderHinge::draw(QPainter& painter) {
 		painter.save();
 		painter.setPen(QPen(QColor(0, 0, 0), 1));
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
+
+		double theta = 0.0;
+		if (links.size() > 0) {
+			for (int i = 0; i < links[0]->joints.size(); ++i) {
+				if (links[0]->joints[i]->id != id) {
+					theta = atan2(links[0]->joints[i]->pos.y - pos.y, links[0]->joints[i]->pos.x - pos.x);
+				}
+			}
+		}
 
 		painter.translate(pos.x, 800 - pos.y);
 		painter.rotate(-theta);
@@ -48,7 +57,41 @@ namespace kinematics {
 	* Return true if the position is updated.
 	* Return false if one of the positions of the parent nodes has not been updated yet.
 	*/
-	bool SliderHinge::forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated) {
+	bool SliderHinge::forwardKinematics() {
+		if (links.size() == 0) {
+			determined = true;
+			return true;
+		}
+
+		// If two of the links have at least one joint with its position determined,
+		// then use them to determine the position of this joint.
+		std::vector<glm::dvec2> positions;
+		std::vector<double> lengths;
+		for (int i = 0; i < links.size(); ++i) {
+			for (int j = 0; j < links[i]->joints.size(); ++j) {
+				if (links[i]->joints[j]->determined) {
+					positions.push_back(links[i]->joints[j]->pos);
+					lengths.push_back(links[i]->getLength(links[i]->joints[j]->id, id));
+				}
+			}
+		}
+		if (positions.size() == 2) {
+			pos = circleLineIntersection(positions[1], lengths[1], positions[0], pos, pos);
+			determined = true;
+			return true;
+		}
+		else if (positions.size() < 2) {
+			return false;
+		}
+		else if (positions.size() > 2) {
+			throw "Over constrained";
+		}
+
+		// Otherwise, postpone updating the position later.
+		return false;
+
+
+		/*
 		if (in_links.size() == 0) return true;
 
 		if (in_links.size() > 2) throw "forward kinematics error. Overconstrained.";
@@ -72,6 +115,8 @@ namespace kinematics {
 			// pin joint
 			pos = l1->forwardKinematics(joints[l1->start]->pos);
 		}
+		*/
+		return false;
 	}
 
 }

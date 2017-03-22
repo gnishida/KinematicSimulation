@@ -17,15 +17,22 @@ namespace kinematics {
 	public:
 		int id;
 		int type;
+		bool driver;
+		bool ground;
 		glm::dvec2 pos;
-		std::vector<boost::shared_ptr<Link>> out_links;
-		std::vector<boost::shared_ptr<Link>> in_links;
+		glm::dvec2 prev_pos;
+		std::vector<boost::shared_ptr<Link>> links;
+		bool determined;
 
 	public:
-		virtual void init(const QMap<int, boost::shared_ptr<Joint>>& joints) = 0;
+		Joint();
+
+		virtual void saveState() = 0;
+		virtual void restoreState() = 0;
+		void rotate(const glm::dvec2& rotation_center, double angle);
 		virtual void draw(QPainter& painter) = 0;
 		virtual void stepForward(double step_size) = 0;
-		virtual bool forwardKinematics(const QMap<int, boost::shared_ptr<Joint>>& joints, const QMap<int, bool>& updated) = 0;
+		virtual bool forwardKinematics() = 0;
 	};
 
 }

@@ -8,24 +8,15 @@
 #include <QMap>
 #include "Joint.h"
 #include "Link.h"
+#include "BodyGeometry.h"
 
 namespace kinematics {
 	
-	class Body {
-	public:
-		int pivot1;
-		int pivot2;
-		std::vector<glm::dvec2> points;
-
-	public:
-		Body(int pivot1, int pivot2) : pivot1(pivot1), pivot2(pivot2) {}
-	};
-
 	class Kinematics {
 	public:
 		QMap<int, boost::shared_ptr<Joint>> joints;
 		std::vector<boost::shared_ptr<Link>> links;
-		std::vector<Body> bodies;
+		std::vector<BodyGeometry> bodies;
 		std::vector<std::vector<glm::vec2>> trace_end_effector;
 
 		bool show_assemblies;
@@ -37,6 +28,8 @@ namespace kinematics {
 
 		void load(const QString& filename);
 		void save(const QString& filename);
+		void saveState();
+		void restoreState();
 		void forwardKinematics();
 		void stepForward(double time_step);
 		void stepBackward();

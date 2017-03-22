@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <design author="Gen Nishida" version="1.0" date="2/26/2017">
 	<joints>
-		<joint id="0" type="gear" driver="true" x="325" y="560" radius="14.866" phase="-0.721" speed="-1"/>
-		<joint id="1" type="gear" driver="true" x="392" y="544" radius="17.263" phase="-3.318" speed="1"/>
+		<joint id="0" type="gear" x="325" y="560" radius="14.866" phase="-0.721" speed="-1"/>
+		<joint id="1" type="gear" x="392" y="544" radius="17.263" phase="-3.318" speed="1"/>
 		<joint id="2" type="pin" x="291.689" y="505.659"/>
 		<joint id="3" type="pin" x="260.69" y="474.626"/>
-		<joint id="4" type="pin" ground="true" x="278" y="558"/>
+		<joint id="4" type="pin" x="278" y="558"/>
 		<joint id="5" type="pin" x="213" y="485"/>
 		<joint id="6" type="pin" x="222" y="522"/>
 		<joint id="7" type="pin" x="138" y="506"/>
@@ -13,12 +13,20 @@
 		<joint id="9" type="pin" x="101" y="374"/>
 	</joints>
 	<links>
-		<link driver="true" joints="0,2,3"/>
-		<link driver="true" joints="1,2"/>
-		<link joints="3,5,8"/>
-		<link joints="4,5,6"/>
-		<link joints="6,7"/>
-		<link joints="7,8,9"/>
+		<link driver="true" order="0" start="0" end="2"/>
+		<link driver="true" order="1" start="1" end="2"/>
+		<link driver="false" order="0" start="0" end="3"/>
+		<link driver="false" order="1" start="2" end="3"/>
+		<link driver="false" order="1" start="3" end="5"/>
+		<link driver="false" order="0" start="4" end="5"/>
+		<link driver="false" order="0" start="4" end="6"/>
+		<link driver="false" order="1" start="5" end="6"/>
+		<link driver="false" order="0" start="6" end="7"/>
+		<link driver="false" order="1" start="8" end="7"/>
+		<link driver="false" order="1" start="3" end="8"/>
+		<link driver="false" order="0" start="5" end="8"/>
+		<link driver="false" order="0" start="7" end="9"/>
+		<link driver="false" order="1" start="8" end="9"/>
 	</links>
 	<bodies>
 		<body id1="4" id2="5">

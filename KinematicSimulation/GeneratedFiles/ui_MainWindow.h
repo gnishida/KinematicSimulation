@@ -34,6 +34,8 @@ public:
     QAction *actionSave;
     QAction *actionStepForward;
     QAction *actionStepBackward;
+    QAction *actionSpeedUp;
+    QAction *actionSpeedDown;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -62,6 +64,10 @@ public:
         actionStepForward->setObjectName(QStringLiteral("actionStepForward"));
         actionStepBackward = new QAction(MainWindowClass);
         actionStepBackward->setObjectName(QStringLiteral("actionStepBackward"));
+        actionSpeedUp = new QAction(MainWindowClass);
+        actionSpeedUp->setObjectName(QStringLiteral("actionSpeedUp"));
+        actionSpeedDown = new QAction(MainWindowClass);
+        actionSpeedDown->setObjectName(QStringLiteral("actionSpeedDown"));
         centralWidget = new QWidget(MainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         MainWindowClass->setCentralWidget(centralWidget);
@@ -88,6 +94,9 @@ public:
         menuFile->addAction(actionExit);
         menuSimulation->addAction(actionSimulationStart);
         menuSimulation->addAction(actionSimulationStop);
+        menuSimulation->addAction(actionSpeedUp);
+        menuSimulation->addAction(actionSpeedDown);
+        menuSimulation->addSeparator();
         menuSimulation->addAction(actionStepForward);
         menuSimulation->addAction(actionStepBackward);
 
@@ -111,6 +120,10 @@ public:
         actionStepForward->setShortcut(QApplication::translate("MainWindowClass", "Right", 0));
         actionStepBackward->setText(QApplication::translate("MainWindowClass", "Step Backward", 0));
         actionStepBackward->setShortcut(QApplication::translate("MainWindowClass", "Left", 0));
+        actionSpeedUp->setText(QApplication::translate("MainWindowClass", "Speed Up", 0));
+        actionSpeedUp->setShortcut(QApplication::translate("MainWindowClass", "Up", 0));
+        actionSpeedDown->setText(QApplication::translate("MainWindowClass", "Speed Down", 0));
+        actionSpeedDown->setShortcut(QApplication::translate("MainWindowClass", "Down", 0));
         menuFile->setTitle(QApplication::translate("MainWindowClass", "File", 0));
         menuSimulation->setTitle(QApplication::translate("MainWindowClass", "Simulation", 0));
     } // retranslateUi

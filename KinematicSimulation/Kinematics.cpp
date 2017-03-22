@@ -49,7 +49,6 @@ namespace kinematics {
 						else if (joint_node.toElement().attribute("type") == "gear") {
 							joints[id] = boost::shared_ptr<Joint>(new Gear(joint_node.toElement()));
 						}
-
 					}
 
 					joint_node = joint_node.nextSibling();
@@ -60,19 +59,17 @@ namespace kinematics {
 				while (!link_node.isNull()) {
 					if (link_node.toElement().tagName() == "link") {
 						// add a link
-						int start = link_node.toElement().attribute("start").toInt();
-						int end = link_node.toElement().attribute("end").toInt();
 						bool driver = link_node.toElement().attribute("driver").toLower() == "true" ? true : false;
-						int order = link_node.toElement().attribute("order").toInt();
-						boost::shared_ptr<Link> link = boost::shared_ptr<Link>(new Link(joints[start], joints[end], driver));
+						boost::shared_ptr<Link> link = boost::shared_ptr<Link>(new Link(driver));
+
+						QStringList joint_list = link_node.toElement().attribute("joints").split(",");
+						for (int i = 0; i < joint_list.size(); ++i) {
+							link->addJoint(joints[joint_list[i].toInt()]);
+
+							// set link to the joint
+							joints[joint_list[i].toInt()]->links.push_back(link);
+						}
 						links.push_back(link);
-
-						// set outgoing link to the point
-						joints[start]->out_links.push_back(link);
-
-						// set incoming link to the point
-						if (joints[end]->in_links.size() < order + 1) joints[end]->in_links.resize(order + 1);
-						joints[end]->in_links[order] = link;
 					}
 
 					link_node = link_node.nextSibling();
@@ -85,7 +82,7 @@ namespace kinematics {
 						// add a body
 						int id1 = body_node.toElement().attribute("id1").toInt();
 						int id2 = body_node.toElement().attribute("id2").toInt();
-						Body body(id1, id2);
+						BodyGeometry body(joints[id1], joints[id2]);
 
 						// setup rotation matrix
 						glm::vec2 dir = joints[id2]->pos - joints[id1]->pos;
@@ -121,15 +118,11 @@ namespace kinematics {
 			node = node.nextSibling();
 		}
 		
-		// initialize joints
-		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			it.value()->init(joints);
-		}
-
 		//trace_end_effector.resize(assemblies.size());
 	}
 
 	void Kinematics::save(const QString& filename) {
+		/*
 		QFile file(filename);
 		if (!file.open(QFile::WriteOnly)) throw "File cannot open.";
 
@@ -181,41 +174,48 @@ namespace kinematics {
 			glm::dvec2 p1 = (joints[bodies[i].pivot1]->pos + joints[bodies[i].pivot2]->pos) * 0.5;
 			glm::dmat4x4 model;
 			model = glm::rotate(model, angle, glm::dvec3(0, 0, 1));
-			
-			for (int k = 0; k < bodies[i].points.size(); ++k) {
-				// convert the coordinates to the local coordinate system
-				glm::dvec2 rotated_p = glm::dvec2(model * glm::vec4(bodies[i].points[k].x, bodies[i].points[k].y, 0, 1)) + p1;
-				QDomElement point_node = doc.createElement("point");
-				point_node.setAttribute("x", rotated_p.x);
-				point_node.setAttribute("y", rotated_p.y);
-				body_node.appendChild(point_node);
-			}
-		}
 
-		QTextStream out(&file);
-		doc.save(out, 4);
+			for (int k = 0; k < bodies[i].points.size(); ++k) {
+			// convert the coordinates to the local coordinate system
+			glm::dvec2 rotated_p = glm::dvec2(model * glm::vec4(bodies[i].points[k].x, bodies[i].points[k].y, 0, 1)) + p1;
+			QDomElement point_node = doc.createElement("point");
+			point_node.setAttribute("x", rotated_p.x);
+			point_node.setAttribute("y", rotated_p.y);
+			body_node.appendChild(point_node);
+			}
+			}
+
+			QTextStream out(&file);
+			doc.save(out, 4);
+			*/
+	}
+
+	void Kinematics::saveState() {
+		for (auto it = joints.begin(); it != joints.end(); ++it) {
+			joints[it.key()]->saveState();
+		}
+	}
+
+	void Kinematics::restoreState() {
+		for (auto it = joints.begin(); it != joints.end(); ++it) {
+			joints[it.key()]->restoreState();
+		}
 	}
 
 	void Kinematics::forwardKinematics() {
 		try {
 			std::list<boost::shared_ptr<Joint>> queue;
-			for (auto it = joints.begin(); it != joints.end(); ++it) {
-				queue.push_back(*it);
-			}
 
-			QMap<int, bool> updated;
+			// put the joints whose position has not been determined into the queue
 			for (auto it = joints.begin(); it != joints.end(); ++it) {
-				updated[it.key()];
+				if (!joints[it.key()]->determined) queue.push_back(joints[it.key()]);
 			}
 
 			while (!queue.empty()) {
 				boost::shared_ptr<Joint> joint = queue.front();
 				queue.pop_front();
 
-				if (joint->forwardKinematics(joints, updated)) {
-					updated[joint->id] = true;
-				}
-				else {
+				if (!joint->forwardKinematics()) {
 					queue.push_back(joint);
 				}
 			}
@@ -226,32 +226,39 @@ namespace kinematics {
 	}
 
 	void Kinematics::stepForward(double time_step) {
+		// save the current state
+		saveState();
+
+		// clear the determined flag of joints and links
+		for (auto it = joints.begin(); it != joints.end(); ++it) {
+			if (joints[it.key()]->ground) {
+				joints[it.key()]->determined = true;
+			}
+			else {
+				joints[it.key()]->determined = false;
+			}
+		}
 		for (int i = 0; i < links.size(); ++i) {
-			if (links[i]->driver) {
-				if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
-					joints[links[i]->start]->stepForward(time_step);
-				}
-				else {
-					links[i]->stepForward(time_step);
-				}
+			links[i]->determined = false;
+		}
+
+		// update the positions of the joints by the driver
+		bool driver_exist = false;
+		for (auto it = joints.begin(); it != joints.end(); ++it) {
+			if (joints[it.key()]->driver) {
+				driver_exist = true;
+				joints[it.key()]->stepForward(time_step);
 			}
 		}
 
-		try {
-			forwardKinematics();
-		}
-		catch (char* ex) {
-			for (int i = 0; i < links.size(); ++i) {
-				if (links[i]->driver) {
-					if (joints[links[i]->start]->type == Joint::TYPE_GEAR) {
-						joints[links[i]->start]->stepForward(-time_step);
-					}
-					else {
-						links[i]->stepForward(-time_step);
-					}
-				}
+		if (driver_exist) {
+			try {
+				forwardKinematics();
 			}
-			throw ex;
+			catch (char* ex) {
+				restoreState();
+				throw ex;
+			}
 		}
 	}
 
@@ -261,10 +268,10 @@ namespace kinematics {
 				painter.save();
 				painter.setPen(QPen(QColor(0, 0, 0), 1));
 				painter.setBrush(QBrush(QColor(0, 255, 0, 60)));
-				glm::dvec2 dir = joints[bodies[i].pivot2]->pos - joints[bodies[i].pivot1]->pos;
+				glm::dvec2 dir = bodies[i].pivot2->pos - bodies[i].pivot1->pos;
 				double angle = atan2(-dir.y, dir.x) / M_PI * 180;
-				//glm::dvec2 p1 = (joints[bodies[i].pivot1]->pos + joints[bodies[i].pivot2]->pos) * 0.5;
-				glm::dvec2 p1 = joints[bodies[i].pivot1]->pos;
+				//glm::dvec2 p1 = (bodies[i].pivot1->pos + bodies[i].pivot2->pos) * 0.5;
+				glm::dvec2 p1 = bodies[i].pivot1->pos;
 				painter.translate(p1.x, 800 - p1.y);
 				painter.rotate(angle);
 				std::vector<QPointF> points;
@@ -278,12 +285,13 @@ namespace kinematics {
 
 		if (show_links) {
 			// draw links
-			painter.setPen(QPen(QColor(0, 0, 0), 3));
-			painter.setBrush(QBrush(QColor(255, 255, 255)));
 			for (int i = 0; i < links.size(); ++i) {
-				painter.drawLine(joints[links[i]->start]->pos.x, 800 - joints[links[i]->start]->pos.y, joints[links[i]->end]->pos.x, 800 - joints[links[i]->end]->pos.y);
-				joints[links[i]->start]->draw(painter);
-				joints[links[i]->end]->draw(painter);
+				links[i]->draw(painter);
+			}
+
+			// draw joints
+			for (auto it = joints.begin(); it != joints.end(); ++it) {
+				joints[it.key()]->draw(painter);
 			}
 		}
 	}

@@ -1,18 +1,22 @@
 <?xml version="1.0"?>
 <design author="Gen Nishida" version="1.0" date="2/26/2017">
 	<joints>
-		<joint id="0" type="pin" x="168" y="357" ground="true"/>
-		<joint id="1" type="pin" x="465" y="357" ground="true"/>
-		<joint id="2" type="pin" x="480" y="357" ground="true" driver="true"/>
+		<joint id="0" type="pin" x="168" y="357"/>
+		<joint id="1" type="pin" x="465" y="357"/>
+		<joint id="2" type="pin" x="480" y="357"/>
 		<joint id="3" type="pin" x="480" y="445"/>
 		<joint id="4" type="pin" x="462" y="445"/>
 		<joint id="5" type="pin" x="287" y="445"/>
 	</joints>
 	<links>
-		<link joints="0,1,2"/>
-		<link joints="3,4,5"/>
-		<link joints="2,3" driver="true"/>
-		<link joints="1,4"/>
+		<link start="0" end="1" driver="false" order="0" />
+		<link start="2" end="1" driver="false" order="1" />
+		<link start="0" end="2" driver="false" order="0" />
+		<link start="2" end="3" driver="true" order="0" />
+		<link start="3" end="4" driver="false" order="0" />
+		<link start="1" end="4" driver="false" order="1" />
+		<link start="4" end="5" driver="false" order="0" />
+		<link start="3" end="5" driver="false" order="1" />
 	</links>
 	<bodies>
 		<body id1="0" id2="2">

@@ -26,6 +26,37 @@ namespace kinematics {
 		return center1 + dir * a / d + perp * h;
 	}
 
+	glm::dvec2 circleCircleIntersection(const glm::dvec2& center1, double radius1, const glm::dvec2& center2, double radius2, const glm::dvec2& prev_int) {
+		glm::dvec2 dir = center2 - center1;
+		double d = glm::length(dir);
+		if (d > radius1 + radius2 || d < abs(radius1 - radius2)) {
+			if (d <= radius1 + radius2 + TOL && d > radius1 + radius2) {
+				d = radius1 + radius2;
+			}
+			else if (d >= abs(radius1 - radius2) - TOL && d < abs(radius1 - radius2)) {
+				d = abs(radius1 - radius2);
+			}
+			else {
+				throw "No intersection";
+			}
+		}
+
+		double a = (radius1 * radius1 - radius2 * radius2 + d * d) / d / 2.0;
+		double h = sqrt(radius1 * radius1 - a * a);
+
+		glm::dvec2 perp(dir.y, -dir.x);
+		perp /= glm::length(perp);
+
+		glm::dvec2 result1 = center1 + dir * a / d + perp * h;
+		glm::dvec2 result2 = center1 + dir * a / d - perp * h;
+		if (glm::length(result1 - prev_int) <= glm::length(result2 - prev_int)) {
+			return result1;
+		}
+		else {
+			return result2;
+		}
+	}
+
 	/**
 	 * Find the intersection that is further from p1
 	 */
@@ -43,6 +74,32 @@ namespace kinematics {
 		}
 
 		return center + n * d - dir * h;
+	}
+
+	/**
+	* Find the intersection that is closer to prev_int
+	*/
+	glm::dvec2 circleLineIntersection(const glm::dvec2& center, double radius, const glm::dvec2& p1, const glm::dvec2& p2, const glm::dvec2& prev_int) {
+		glm::dvec2 dir = p2 - p1;
+		dir /= glm::length(dir);
+
+		glm::dvec2 n(-dir.y, dir.x);
+
+		double d = glm::dot(p1 - center, n);
+		double h = sqrt(radius * radius - d * d);
+
+		if (abs(d) > radius) {
+			throw "No intersection";
+		}
+
+		glm::dvec2 result1 = center + n * d + dir * h;
+		glm::dvec2 result2 = center + n * d - dir * h;
+		if (glm::length(result1 - prev_int) <= glm::length(result2 - prev_int)) {
+			return result1;
+		}
+		else {
+			return result2;
+		}
 	}
 
 }
