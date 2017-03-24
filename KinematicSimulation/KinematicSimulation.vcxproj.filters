@@ -33,6 +33,9 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\kinematics">
+      <UniqueIdentifier>{e477963f-aa12-4c7b-b394-599220eaadaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,32 +62,29 @@
     <ClCompile Include="Canvas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Kinematics.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\BodyGeometry.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="PinJoint.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\Gear.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="Joint.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\Joint.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="DrivingMechanism.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\Kinematics.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="Link.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\Link.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="SliderHinge.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\PinJoint.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\SliderHinge.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="Gear.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BodyGeometry.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="kinematics\Utils.cpp">
+      <Filter>Source Files\kinematics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,32 +105,29 @@
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="Kinematics.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\BodyGeometry.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="PinJoint.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\Gear.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="Joint.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\Joint.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="DrivingMechanism.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\Kinematics.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="Link.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\Link.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="SliderHinge.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\PinJoint.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\SliderHinge.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="Gear.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BodyGeometry.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="kinematics\Utils.h">
+      <Filter>Source Files\kinematics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

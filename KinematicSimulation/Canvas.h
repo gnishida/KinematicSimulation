@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 #include <glm/glm.hpp>
 #include <boost/shared_ptr.hpp>
-#include "Kinematics.h"
+#include <Kinematics.h>
 #include <QTimer>
 
 class Canvas : public QWidget {
