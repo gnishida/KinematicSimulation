@@ -82,7 +82,7 @@ namespace kinematics {
 						// add a body
 						int id1 = body_node.toElement().attribute("id1").toInt();
 						int id2 = body_node.toElement().attribute("id2").toInt();
-						BodyGeometry body(joints[id1], joints[id2]);
+						boost::shared_ptr<BodyGeometry> body = boost::shared_ptr<BodyGeometry>(new BodyGeometry(joints[id1], joints[id2]));
 
 						// setup rotation matrix
 						glm::vec2 dir = joints[id2]->pos - joints[id1]->pos;
@@ -102,7 +102,7 @@ namespace kinematics {
 								// convert the coordinates to the local coordinate system
 								glm::dvec2 rotated_p = glm::dvec2(model * glm::dvec4(x - p1.x, y - p1.y, 0, 1));
 								
-								body.points.push_back(rotated_p);
+								body->points.push_back(rotated_p);
 							}
 
 							point_node = point_node.nextSibling();
@@ -118,6 +118,9 @@ namespace kinematics {
 			node = node.nextSibling();
 		}
 		
+		// initialize the adancency between rigid bodies
+		updateBodyAdjacency();
+
 		//trace_end_effector.resize(assemblies.size());
 	}
 
@@ -224,6 +227,10 @@ namespace kinematics {
 				throw "infinite loop is detected.";
 			}
 		}
+
+		if (isCollided()) {
+			throw "collision is detected.";
+		}
 	}
 
 	void Kinematics::stepForward(double time_step) {
@@ -260,24 +267,59 @@ namespace kinematics {
 		}
 	}
 
+	void Kinematics::updateBodyAdjacency() {
+		// clear the neighbors
+		for (int i = 0; i < bodies.size(); ++i) {
+			bodies[i]->neighbors.clear();
+		}
+
+		// check the adjacency
+		for (int i = 0; i < bodies.size(); ++i) {
+			for (int j = i + 1; j < bodies.size(); ++j) {
+				if (polygonPolygonIntersection(bodies[i]->getActualPoints(), bodies[j]->getActualPoints())) {
+					bodies[i]->neighbors[j] = true;
+					bodies[j]->neighbors[i] = true;
+				}
+			}
+		}
+	}
+
+	bool Kinematics::isCollided() {
+		for (int i = 0; i < bodies.size(); ++i) {
+			for (int j = i + 1; j < bodies.size(); ++j) {
+				// skip the neighbors
+				if (bodies[i]->neighbors.contains(j)) continue;
+
+				if (polygonPolygonIntersection(bodies[i]->getActualPoints(), bodies[j]->getActualPoints())) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	void Kinematics::draw(QPainter& painter) {
 		if (show_bodies) {
 			for (int i = 0; i < bodies.size(); ++i) {
+				bodies[i]->draw(painter);
+				/*
 				painter.save();
 				painter.setPen(QPen(QColor(0, 0, 0), 1));
 				painter.setBrush(QBrush(QColor(0, 255, 0, 60)));
-				glm::dvec2 dir = bodies[i].pivot2->pos - bodies[i].pivot1->pos;
+				glm::dvec2 dir = bodies[i]->pivot2->pos - bodies[i]->pivot1->pos;
 				double angle = atan2(-dir.y, dir.x) / M_PI * 180;
 				//glm::dvec2 p1 = (bodies[i].pivot1->pos + bodies[i].pivot2->pos) * 0.5;
-				glm::dvec2 p1 = bodies[i].pivot1->pos;
+				glm::dvec2 p1 = bodies[i]->pivot1->pos;
 				painter.translate(p1.x, 800 - p1.y);
 				painter.rotate(angle);
 				std::vector<QPointF> points;
-				for (int k = 0; k < bodies[i].points.size(); ++k) {
-					points.push_back(QPointF(bodies[i].points[k].x, -bodies[i].points[k].y));
+				for (int k = 0; k < bodies[i]->points.size(); ++k) {
+					points.push_back(QPointF(bodies[i]->points[k].x, -bodies[i]->points[k].y));
 				}
 				painter.drawPolygon(points.data(), points.size());
 				painter.restore();
+				*/
 			}
 		}
 

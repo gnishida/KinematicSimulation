@@ -16,7 +16,7 @@ namespace kinematics {
 	public:
 		QMap<int, boost::shared_ptr<Joint>> joints;
 		std::vector<boost::shared_ptr<Link>> links;
-		std::vector<BodyGeometry> bodies;
+		std::vector<boost::shared_ptr<BodyGeometry>> bodies;
 		std::vector<std::vector<glm::vec2>> trace_end_effector;
 
 		bool show_assemblies;
@@ -32,7 +32,8 @@ namespace kinematics {
 		void restoreState();
 		void forwardKinematics();
 		void stepForward(double time_step);
-		void stepBackward();
+		void updateBodyAdjacency();
+		bool isCollided();
 		void draw(QPainter& painter);
 		void showAssemblies(bool flag);
 		void showLinks(bool flag);
