@@ -40,6 +40,7 @@
     <addaction name="actionSimulationStop"/>
     <addaction name="actionSpeedUp"/>
     <addaction name="actionSpeedDown"/>
+    <addaction name="actionInvertSpeed"/>
     <addaction name="separator"/>
     <addaction name="actionStepForward"/>
     <addaction name="actionStepBackward"/>
@@ -122,6 +123,11 @@
    </property>
    <property name="shortcut">
     <string>Down</string>
+   </property>
+  </action>
+  <action name="actionInvertSpeed">
+   <property name="text">
+    <string>Invert Speed</string>
    </property>
   </action>
  </widget>

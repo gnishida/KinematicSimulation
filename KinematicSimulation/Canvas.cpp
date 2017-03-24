@@ -70,6 +70,10 @@ void Canvas::speedDown() {
 	simulation_speed *= 0.5;
 }
 
+void Canvas::invertSpeed() {
+	simulation_speed = -simulation_speed;
+}
+
 void Canvas::stepForward() {
 	if (animation_timer == NULL) {
 		try {

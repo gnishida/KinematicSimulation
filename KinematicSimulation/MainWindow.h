@@ -24,6 +24,7 @@ public slots:
 	void onSimulationStop();
 	void onSpeedUp();
 	void onSpeedDown();
+	void onInvertSpeed();
 	void onStepForward();
 	void onStepBackward();
 };

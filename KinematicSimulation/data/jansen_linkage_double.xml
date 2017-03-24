@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<design author="Gen Nishida" version="1.0" date="3/22/2017">
+	<joints>
+		<joint id="0" type="pin" ground="true" driver="true" x="353" y="491"/>
+		<joint id="1" type="pin" ground="true" x="407" y="491"/>
+		<joint id="2" type="pin" ground="true" x="197" y="491"/>
+		<joint id="3" type="pin" ground="true" x="509" y="491"/>
+		<joint id="4" type="pin" x="234" y="608"/>
+		<joint id="5" type="pin" x="585" y="588"/>
+		<joint id="6" type="pin" x="79" y="528"/>
+		<joint id="7" type="pin" x="608" y="416"/>
+		<joint id="8" type="pin" x="240" y="375"/>
+		<joint id="9" type="pin" x="581" y="390"/>
+		<joint id="10" type="pin" x="121" y="412"/>
+		<joint id="11" type="pin" x="679" y="315"/>
+		<joint id="12" type="pin" x="183" y="204"/>
+		<joint id="13" type="pin" x="471" y="248"/>
+	</joints>
+	<links>
+		<link joints="0,1" driver="true"/>
+		<link joints="0,2,3"/>
+		<link joints="1,4"/>
+		<link joints="1,8"/>
+		<link joints="1,5"/>
+		<link joints="1,9"/>
+		<link joints="2,4,6"/>
+		<link joints="3,5,7"/>
+		<link joints="2,8"/>
+		<link joints="6,10"/>
+		<link joints="3,9"/>
+		<link joints="7,11"/>
+		<link joints="8,10,12"/>
+		<link joints="9,11,13"/>
+	</links>
+</design>

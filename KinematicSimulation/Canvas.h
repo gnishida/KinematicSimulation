@@ -30,6 +30,7 @@ public:
 	void stop();
 	void speedUp();
 	void speedDown();
+	void invertSpeed();
 	void stepForward();
 	void stepBackward();
 	void showAssemblies(bool flag);

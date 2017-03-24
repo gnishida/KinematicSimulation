@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<design author="Gen Nishida" version="1.0" date="3/22/2017">
+	<joints>
+		<joint id="0" type="pin" ground="true" driver="true" x="310" y="380"/>
+		<joint id="1" type="pin" ground="true" x="250" y="362"/>
+		<joint id="2" type="pin" ground="true" x="313" y="428"/>
+		<joint id="3" type="pin" x="332" y="405"/>
+		<joint id="4" type="pin" x="273" y="392"/>
+		<joint id="5" type="pin" x="260" y="488"/>
+		<joint id="6" type="pin" x="205" y="393"/>
+		<joint id="7" type="pin" x="288" y="356"/>
+		<joint id="8" type="pin" x="246" y="402"/>
+		<joint id="9" type="pin" x="309" y="507"/>
+		<joint id="10" type="pin" x="209" y="458"/>
+		<joint id="11" type="pin" ground="true" driver="true" x="450" y="380"/>
+		<joint id="12" type="pin" ground="true" x="510" y="363"/>
+		<joint id="13" type="pin" ground="true" x="448" y="428"/>
+		<joint id="14" type="pin" x="475" y="401"/>
+		<joint id="15" type="pin" x="534" y="391"/>
+		<joint id="16" type="pin" x="519" y="465"/>
+		<joint id="17" type="pin" x="603" y="393"/>
+		<joint id="18" type="pin" x="424" y="360"/>
+		<joint id="19" type="pin" x="479" y="383"/>
+		<joint id="20" type="pin" x="463" y="506"/>
+		<joint id="21" type="pin" x="535" y="424"/>
+	</joints>
+	<links>
+		<link joints="0,3" driver="true"/>
+		<link joints="1,4"/>
+		<link joints="3,4,6"/>
+		<link joints="2,5"/>
+		<link joints="5,6"/>
+		<link joints="0,7" driver="true"/>
+		<link joints="1,8"/>
+		<link joints="2,9"/>
+		<link joints="7,8,10"/>
+		<link joints="9,10"/>
+		<link joints="11,14" driver="true"/>
+		<link joints="12,15"/>
+		<link joints="14,15,17"/>
+		<link joints="13,16"/>
+		<link joints="16,17"/>
+		<link joints="11,18" driver="true"/>
+		<link joints="12,19"/>
+		<link joints="18,19,21"/>
+		<link joints="13,20"/>
+		<link joints="20,21"/>
+	</links>
+	<bodies>
+		<body id1="0" id2="11">
+			<point x="310" y="442"/>
+			<point x="449" y="442"/>
+			<point x="550" y="384"/>
+			<point x="501" y="333"/>
+			<point x="259" y="333"/>
+			<point x="209" y="384"/>
+		</body>
+		<body id1="5" id2="6">
+			<point x="257" y="495"/>
+			<point x="267" y="490"/>
+			<point x="217" y="388"/>
+			<point x="214" y="351"/>
+			<point x="238" y="245"/>
+			<point x="227" y="241"/>
+			<point x="188" y="350"/>
+			<point x="194" y="397"/>
+		</body>
+		<body id1="9" id2="10">
+			<point x="309" y="514"/>
+			<point x="316" y="505"/>
+			<point x="221" y="450"/>
+			<point x="196" y="420"/>
+			<point x="158" y="316"/>
+			<point x="146" y="319"/>
+			<point x="173" y="432"/>
+			<point x="203" y="469"/>
+		</body>
+		<body id1="16" id2="17">
+			<point x="512" y="464"/>
+			<point x="518" y="473"/>
+			<point x="613" y="402"/>
+			<point x="632" y="361"/>
+			<point x="632" y="243"/>
+			<point x="620" y="242"/>
+			<point x="608" y="354"/>
+			<point x="592" y="386"/>
+		</body>
+		<body id1="20" id2="21">
+			<point x="455" y="506"/>
+			<point x="463" y="514"/>
+			<point x="546" y="433"/>
+			<point x="560" y="387"/>
+			<point x="544" y="271"/>
+			<point x="533" y="271"/>
+			<point x="535" y="380"/>
+			<point x="524" y="419"/>
+		</body>
+	</bodies>
+</design>

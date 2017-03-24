@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(ui.actionSimulationStop, SIGNAL(triggered()), this, SLOT(onSimulationStop()));
 	connect(ui.actionSpeedUp, SIGNAL(triggered()), this, SLOT(onSpeedUp()));
 	connect(ui.actionSpeedDown, SIGNAL(triggered()), this, SLOT(onSpeedDown()));
+	connect(ui.actionInvertSpeed, SIGNAL(triggered()), this, SLOT(onInvertSpeed()));
 	connect(ui.actionStepForward, SIGNAL(triggered()), this, SLOT(onStepForward()));
 	connect(ui.actionStepBackward, SIGNAL(triggered()), this, SLOT(onStepBackward()));
 }
@@ -24,6 +25,8 @@ MainWindow::~MainWindow() {
 void MainWindow::onOpen() {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Design file..."), "", tr("Design Files (*.xml)"));
 	if (filename.isEmpty()) return;
+
+	this->setWindowTitle("Kinematic Simulation - " + filename);
 
 	try {
 		canvas.open(filename);
@@ -54,6 +57,10 @@ void MainWindow::onSpeedUp() {
 
 void MainWindow::onSpeedDown() {
 	canvas.speedDown();
+}
+
+void MainWindow::onInvertSpeed() {
+	canvas.invertSpeed();
 }
 
 void MainWindow::onStepForward() {

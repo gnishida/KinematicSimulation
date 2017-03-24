@@ -36,6 +36,7 @@ public:
     QAction *actionStepBackward;
     QAction *actionSpeedUp;
     QAction *actionSpeedDown;
+    QAction *actionInvertSpeed;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -68,6 +69,8 @@ public:
         actionSpeedUp->setObjectName(QStringLiteral("actionSpeedUp"));
         actionSpeedDown = new QAction(MainWindowClass);
         actionSpeedDown->setObjectName(QStringLiteral("actionSpeedDown"));
+        actionInvertSpeed = new QAction(MainWindowClass);
+        actionInvertSpeed->setObjectName(QStringLiteral("actionInvertSpeed"));
         centralWidget = new QWidget(MainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         MainWindowClass->setCentralWidget(centralWidget);
@@ -96,6 +99,7 @@ public:
         menuSimulation->addAction(actionSimulationStop);
         menuSimulation->addAction(actionSpeedUp);
         menuSimulation->addAction(actionSpeedDown);
+        menuSimulation->addAction(actionInvertSpeed);
         menuSimulation->addSeparator();
         menuSimulation->addAction(actionStepForward);
         menuSimulation->addAction(actionStepBackward);
@@ -124,6 +128,7 @@ public:
         actionSpeedUp->setShortcut(QApplication::translate("MainWindowClass", "Up", 0));
         actionSpeedDown->setText(QApplication::translate("MainWindowClass", "Speed Down", 0));
         actionSpeedDown->setShortcut(QApplication::translate("MainWindowClass", "Down", 0));
+        actionInvertSpeed->setText(QApplication::translate("MainWindowClass", "Invert Speed", 0));
         menuFile->setTitle(QApplication::translate("MainWindowClass", "File", 0));
         menuSimulation->setTitle(QApplication::translate("MainWindowClass", "Simulation", 0));
     } // retranslateUi
