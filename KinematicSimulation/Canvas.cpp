@@ -9,24 +9,12 @@
 #include <QResizeEvent>
 #include <QtWidgets/QApplication>
 
-#ifndef SQR
-#define SQR(x)	((x) * (x))
-#endif
-
 Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	ctrlPressed = false;
 	shiftPressed = false;
 
 	animation_timer = NULL;
 	simulation_speed = 0.01;
-	
-	try {
-		kinematics.forwardKinematics();
-	}
-	catch (char* ex) {
-		std::cerr << "Initialization error:" << std::endl;
-		std::cerr << ex << std::endl;
-	}
 }
 
 Canvas::~Canvas() {
