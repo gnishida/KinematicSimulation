@@ -4,7 +4,13 @@
 
 namespace kinematics {
 
-	Link::Link(bool driver) {
+	Link::Link(int id) {
+		this->id = id;
+		this->driver = false;
+	}
+
+	Link::Link(int id, bool driver) {
+		this->id = id;
 		this->driver = driver;
 	}
 

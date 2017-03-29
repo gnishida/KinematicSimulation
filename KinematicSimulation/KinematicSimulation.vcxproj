@@ -164,6 +164,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="KinematicDiagram.cpp" />
     <ClCompile Include="kinematics\BodyGeometry.cpp" />
     <ClCompile Include="kinematics\Gear.cpp" />
     <ClCompile Include="kinematics\Joint.cpp" />
@@ -216,6 +217,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="KinematicDiagram.h" />
     <ClInclude Include="kinematics\BodyGeometry.h" />
     <ClInclude Include="kinematics\Gear.h" />
     <ClInclude Include="kinematics\Joint.h" />

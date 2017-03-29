@@ -27,8 +27,7 @@ namespace kinematics {
 		if (root.tagName() != "design")	throw "Invalid file format.";
 
 		// clear the data
-		joints.clear();
-		links.clear();
+		diagram.clear();
 		bodies.clear();
 		trace_end_effector.clear();
 
@@ -41,13 +40,13 @@ namespace kinematics {
 						// add a joint
 						int id = joint_node.toElement().attribute("id").toInt();
 						if (joint_node.toElement().attribute("type") == "pin") {
-							joints[id] = boost::shared_ptr<Joint>(new PinJoint(joint_node.toElement()));
+							diagram.addJoint(boost::shared_ptr<Joint>(new PinJoint(joint_node.toElement())));
 						}
 						else if (joint_node.toElement().attribute("type") == "slider_hinge") {
-							joints[id] = boost::shared_ptr<Joint>(new SliderHinge(joint_node.toElement()));
+							diagram.addJoint(boost::shared_ptr<Joint>(new SliderHinge(joint_node.toElement())));
 						}
 						else if (joint_node.toElement().attribute("type") == "gear") {
-							joints[id] = boost::shared_ptr<Joint>(new Gear(joint_node.toElement()));
+							diagram.addJoint(boost::shared_ptr<Joint>(new Gear(joint_node.toElement())));
 						}
 					}
 
@@ -60,16 +59,12 @@ namespace kinematics {
 					if (link_node.toElement().tagName() == "link") {
 						// add a link
 						bool driver = link_node.toElement().attribute("driver").toLower() == "true" ? true : false;
-						boost::shared_ptr<Link> link = boost::shared_ptr<Link>(new Link(driver));
-
+						std::vector<boost::shared_ptr<Joint>> joints;
 						QStringList joint_list = link_node.toElement().attribute("joints").split(",");
 						for (int i = 0; i < joint_list.size(); ++i) {
-							link->addJoint(joints[joint_list[i].toInt()]);
-
-							// set link to the joint
-							joints[joint_list[i].toInt()]->links.push_back(link);
+							joints.push_back(diagram.joints[joint_list[i].toInt()]);
 						}
-						links.push_back(link);
+						diagram.addLink(driver, joints);
 					}
 
 					link_node = link_node.nextSibling();
@@ -82,14 +77,14 @@ namespace kinematics {
 						// add a body
 						int id1 = body_node.toElement().attribute("id1").toInt();
 						int id2 = body_node.toElement().attribute("id2").toInt();
-						boost::shared_ptr<BodyGeometry> body = boost::shared_ptr<BodyGeometry>(new BodyGeometry(joints[id1], joints[id2]));
+						boost::shared_ptr<BodyGeometry> body = boost::shared_ptr<BodyGeometry>(new BodyGeometry(diagram.joints[id1], diagram.joints[id2]));
 
 						// setup rotation matrix
-						glm::vec2 dir = joints[id2]->pos - joints[id1]->pos;
+						glm::vec2 dir = diagram.joints[id2]->pos - diagram.joints[id1]->pos;
 						double angle = atan2(dir.y, dir.x);
 						
-						//glm::dvec2 p1 = (joints[id1]->pos + joints[id2]->pos) * 0.5;
-						glm::dvec2 p1 = joints[id1]->pos;
+						//glm::dvec2 p1 = (diagram.joints[id1]->pos + diagram.joints[id2]->pos) * 0.5;
+						glm::dvec2 p1 = diagram.joints[id1]->pos;
 						glm::dmat4x4 model;
 						model = glm::rotate(model, -angle, glm::dvec3(0, 0, 1));						
 												
@@ -194,23 +189,19 @@ namespace kinematics {
 	}
 
 	void Kinematics::saveState() {
-		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			joints[it.key()]->saveState();
-		}
+		diagram.saveState();
 	}
 
 	void Kinematics::restoreState() {
-		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			joints[it.key()]->restoreState();
-		}
+		diagram.restoreState();
 	}
 
 	void Kinematics::forwardKinematics() {
 		std::list<boost::shared_ptr<Joint>> queue;
 
 		// put the joints whose position has not been determined into the queue
-		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			if (!joints[it.key()]->determined) queue.push_back(joints[it.key()]);
+		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
+			if (!diagram.joints[it.key()]->determined) queue.push_back(diagram.joints[it.key()]);
 		}
 
 		int count = 0;
@@ -238,21 +229,21 @@ namespace kinematics {
 		saveState();
 
 		// clear the determined flag of joints
-		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			if (joints[it.key()]->ground) {
-				joints[it.key()]->determined = true;
+		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
+			if (diagram.joints[it.key()]->ground) {
+				diagram.joints[it.key()]->determined = true;
 			}
 			else {
-				joints[it.key()]->determined = false;
+				diagram.joints[it.key()]->determined = false;
 			}
 		}
 
 		// update the positions of the joints by the driver
 		bool driver_exist = false;
-		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			if (joints[it.key()]->ground) {
+		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
+			if (diagram.joints[it.key()]->ground) {
 				driver_exist = true;
-				joints[it.key()]->stepForward(time_step);
+				diagram.joints[it.key()]->stepForward(time_step);
 			}
 		}
 
@@ -308,13 +299,13 @@ namespace kinematics {
 
 		if (show_links) {
 			// draw links
-			for (int i = 0; i < links.size(); ++i) {
-				links[i]->draw(painter);
+			for (int i = 0; i < diagram.links.size(); ++i) {
+				diagram.links[i]->draw(painter);
 			}
 
 			// draw joints
-			for (auto it = joints.begin(); it != joints.end(); ++it) {
-				joints[it.key()]->draw(painter);
+			for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
+				diagram.joints[it.key()]->draw(painter);
 			}
 		}
 	}

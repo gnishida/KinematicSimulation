@@ -12,13 +12,14 @@ namespace kinematics {
 
 	class Link {
 	public:
+		int id;
 		std::vector<boost::shared_ptr<Joint>> joints;
 		QMap<int, glm::dvec2> original_shape;
 		bool driver;
 
 	public:
-		Link() {}
-		Link(bool driver);
+		Link(int id);
+		Link(int id, bool driver);
 
 		bool isDetermined();
 		bool isGrounded();

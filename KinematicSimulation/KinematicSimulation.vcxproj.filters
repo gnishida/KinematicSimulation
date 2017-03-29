@@ -86,6 +86,9 @@
     <ClCompile Include="kinematics\Utils.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
+    <ClCompile Include="KinematicDiagram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="kinematics\Utils.h">
       <Filter>Source Files\kinematics</Filter>
+    </ClInclude>
+    <ClInclude Include="KinematicDiagram.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

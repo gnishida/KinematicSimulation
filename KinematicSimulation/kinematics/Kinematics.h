@@ -9,13 +9,13 @@
 #include "Joint.h"
 #include "Link.h"
 #include "BodyGeometry.h"
+#include "KinematicDiagram.h"
 
 namespace kinematics {
 	
 	class Kinematics {
 	public:
-		QMap<int, boost::shared_ptr<Joint>> joints;
-		std::vector<boost::shared_ptr<Link>> links;
+		KinematicDiagram diagram;
 		std::vector<boost::shared_ptr<BodyGeometry>> bodies;
 		std::vector<std::vector<glm::vec2>> trace_end_effector;
 
