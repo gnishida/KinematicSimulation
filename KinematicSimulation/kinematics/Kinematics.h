@@ -16,7 +16,6 @@ namespace kinematics {
 	class Kinematics {
 	public:
 		KinematicDiagram diagram;
-		std::vector<boost::shared_ptr<BodyGeometry>> bodies;
 		std::vector<std::vector<glm::vec2>> trace_end_effector;
 
 		bool show_assemblies;
@@ -28,13 +27,10 @@ namespace kinematics {
 
 		void load(const QString& filename);
 		void save(const QString& filename);
-		void saveState();
-		void restoreState();
 		void forwardKinematics();
 		void stepForward(double time_step);
-		void updateBodyAdjacency();
 		bool isCollided();
-		void draw(QPainter& painter);
+		void draw(QPainter& painter) const ;
 		void showAssemblies(bool flag);
 		void showLinks(bool flag);
 		void showBodies(bool flag);

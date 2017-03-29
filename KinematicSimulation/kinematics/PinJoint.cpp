@@ -4,9 +4,10 @@
 
 namespace kinematics {
 
-	PinJoint::PinJoint(int id, const glm::dvec2& pos) : Joint() {
+	PinJoint::PinJoint(int id, bool ground, const glm::dvec2& pos) : Joint() {
 		this->id = id;
 		this->type = TYPE_PIN;
+		this->ground = ground;
 		this->pos = pos;
 	}
 
@@ -16,14 +17,6 @@ namespace kinematics {
 		this->ground = node.attribute("ground").toLower() == "true";
 		pos.x = node.attribute("x").toDouble();
 		pos.y = node.attribute("y").toDouble();
-	}
-
-	void PinJoint::saveState() {
-		prev_pos = pos;
-	}
-
-	void PinJoint::restoreState() {
-		pos = prev_pos;
 	}
 
 	void PinJoint::draw(QPainter& painter) {

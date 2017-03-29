@@ -4,9 +4,10 @@
 
 namespace kinematics {
 
-	Gear::Gear(int id, const glm::dvec2& center, double radius, double speed, double phase) : Joint() {
+	Gear::Gear(int id, bool ground, const glm::dvec2& center, double radius, double speed, double phase) : Joint() {
 		this->id = id;
 		this->type = TYPE_GEAR;
+		this->ground = ground;
 		this->center = center;
 		this->radius = radius;
 		this->speed = speed;
@@ -24,16 +25,6 @@ namespace kinematics {
 		speed = node.attribute("speed").toDouble();
 		phase = node.attribute("phase").toDouble();
 		pos = center + glm::dvec2(cos(phase), sin(phase)) * radius;
-	}
-
-	void Gear::saveState() {
-		prev_pos = pos;
-		prev_phase = phase;
-	}
-
-	void Gear::restoreState() {
-		pos = prev_pos;
-		phase = prev_phase;
 	}
 
 	void Gear::draw(QPainter& painter) {

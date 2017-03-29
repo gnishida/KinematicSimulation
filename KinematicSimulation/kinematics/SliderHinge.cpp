@@ -4,9 +4,10 @@
 
 namespace kinematics {
 
-	SliderHinge::SliderHinge(int id, const glm::dvec2& pos) : Joint() {
+	SliderHinge::SliderHinge(int id, bool ground, const glm::dvec2& pos) : Joint() {
 		this->id = id;
 		this->type = TYPE_SLIDER_HINGE;
+		this->ground = ground;
 		this->pos = pos;
 	}
 
@@ -16,14 +17,6 @@ namespace kinematics {
 		this->ground = node.attribute("ground").toLower() == "true";
 		pos.x = node.attribute("x").toDouble();
 		pos.y = node.attribute("y").toDouble();
-	}
-
-	void SliderHinge::saveState() {
-		prev_pos = pos;
-	}
-
-	void SliderHinge::restoreState() {
-		pos = prev_pos;
 	}
 
 	void SliderHinge::draw(QPainter& painter) {
