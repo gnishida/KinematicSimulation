@@ -17,7 +17,6 @@ namespace kinematics {
 	Gear::Gear(QDomElement& node) : Joint() {
 		id = node.attribute("id").toInt();
 		type = TYPE_GEAR;
-		this->driver = node.attribute("driver").toLower() == "true";
 		this->ground = node.attribute("ground").toLower() == "true";
 		center.x = node.attribute("x").toDouble();
 		center.y = node.attribute("y").toDouble();

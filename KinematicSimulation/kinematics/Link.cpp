@@ -18,6 +18,16 @@ namespace kinematics {
 		else return false;
 	}
 
+	bool Link::isGrounded() {
+		int count = 0;
+		for (int i = 0; i < joints.size(); ++i) {
+			if (joints[i]->ground) count++;
+		}
+
+		if (count >= 2) return true;
+		else return false;
+	}
+
 	void Link::addJoint(boost::shared_ptr<Joint> joint) {
 		joints.push_back(joint);
 		original_shape[joint->id] = joint->pos;

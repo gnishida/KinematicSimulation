@@ -2,14 +2,14 @@
 <design author="Gen Nishida" version="1.0" date="2/26/2017">
 	<joints>
 		<joint id="0" type="pin" ground="true" x="300" y="300"/>
-		<joint id="1" type="pin" ground="true" driver="true" x="500" y="300"/>
+		<joint id="1" type="pin" ground="true" x="500" y="300"/>
 		<joint id="2" type="pin" x="580" y="580"/>
 		<joint id="3" type="pin" x="300" y="450"/>
 		<joint id="4" type="pin" x="400" y="600"/>
 	</joints>
 	<links>
-		<link joints="0,3" />
-		<link joints="1,2" driver="true" />
-		<link joints="2,3,4" />
+		<link joints="0,3"/>
+		<link joints="1,2" driver="true"/>
+		<link joints="2,3,4"/>
 	</links>
 </design>

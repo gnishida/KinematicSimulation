@@ -13,7 +13,6 @@ namespace kinematics {
 	PinJoint::PinJoint(QDomElement& node) : Joint() {
 		id = node.attribute("id").toInt();
 		this->type = TYPE_PIN;
-		this->driver = node.attribute("driver").toLower() == "true";
 		this->ground = node.attribute("ground").toLower() == "true";
 		pos.x = node.attribute("x").toDouble();
 		pos.y = node.attribute("y").toDouble();
@@ -36,12 +35,14 @@ namespace kinematics {
 	}
 
 	void PinJoint::stepForward(double step_size) {
-		for (int i = 0; i < links.size(); ++i) {
-			if (links[i]->driver) {
-				links[i]->rotate(pos, step_size);
+		if (ground) {
+			for (int i = 0; i < links.size(); ++i) {
+				if (links[i]->driver) {
+					links[i]->rotate(pos, step_size);
+				}
 			}
+			determined = true;
 		}
-		determined = true;
 	}
 
 	/**

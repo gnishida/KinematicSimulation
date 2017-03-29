@@ -3,7 +3,7 @@
 	<joints>
 		<joint id="0" type="pin" x="168" y="377" ground="true"/>
 		<joint id="1" type="pin" x="470" y="377" ground="true"/>
-		<joint id="2" type="pin" x="480" y="377" ground="true" driver="true"/>
+		<joint id="2" type="pin" x="480" y="377" ground="true"/>
 		<joint id="3" type="pin" x="460" y="425"/>
 		<joint id="4" type="pin" x="442" y="425"/>
 		<joint id="5" type="pin" x="287" y="425"/>

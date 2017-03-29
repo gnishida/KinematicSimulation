@@ -17,7 +17,7 @@ namespace kinematics {
 	public:
 		int id;
 		int type;
-		bool driver;
+		//bool driver;
 		bool ground;
 		glm::dvec2 pos;
 		glm::dvec2 prev_pos;

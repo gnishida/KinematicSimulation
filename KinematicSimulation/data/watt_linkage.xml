@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <design author="Gen Nishida" version="1.0" date="3/22/2017">
 	<joints>
-		<joint id="0" type="pin" ground="true" driver="true" x="204" y="300"/>
+		<joint id="0" type="pin" ground="true" x="204" y="300"/>
 		<joint id="1" type="pin" x="188" y="355"/>
 		<joint id="2" type="pin" ground="true" x="339" y="305"/>
 		<joint id="3" type="pin" x="310" y="493"/>

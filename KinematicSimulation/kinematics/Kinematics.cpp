@@ -250,7 +250,7 @@ namespace kinematics {
 		// update the positions of the joints by the driver
 		bool driver_exist = false;
 		for (auto it = joints.begin(); it != joints.end(); ++it) {
-			if (joints[it.key()]->driver) {
+			if (joints[it.key()]->ground) {
 				driver_exist = true;
 				joints[it.key()]->stepForward(time_step);
 			}
@@ -303,23 +303,6 @@ namespace kinematics {
 		if (show_bodies) {
 			for (int i = 0; i < bodies.size(); ++i) {
 				bodies[i]->draw(painter);
-				/*
-				painter.save();
-				painter.setPen(QPen(QColor(0, 0, 0), 1));
-				painter.setBrush(QBrush(QColor(0, 255, 0, 60)));
-				glm::dvec2 dir = bodies[i]->pivot2->pos - bodies[i]->pivot1->pos;
-				double angle = atan2(-dir.y, dir.x) / M_PI * 180;
-				//glm::dvec2 p1 = (bodies[i].pivot1->pos + bodies[i].pivot2->pos) * 0.5;
-				glm::dvec2 p1 = bodies[i]->pivot1->pos;
-				painter.translate(p1.x, 800 - p1.y);
-				painter.rotate(angle);
-				std::vector<QPointF> points;
-				for (int k = 0; k < bodies[i]->points.size(); ++k) {
-					points.push_back(QPointF(bodies[i]->points[k].x, -bodies[i]->points[k].y));
-				}
-				painter.drawPolygon(points.data(), points.size());
-				painter.restore();
-				*/
 			}
 		}
 

@@ -13,7 +13,6 @@ namespace kinematics {
 	SliderHinge::SliderHinge(QDomElement& node) : Joint() {
 		id = node.attribute("id").toInt();
 		type = TYPE_SLIDER_HINGE;
-		this->driver = node.attribute("driver").toLower() == "true";
 		this->ground = node.attribute("ground").toLower() == "true";
 		pos.x = node.attribute("x").toDouble();
 		pos.y = node.attribute("y").toDouble();
