@@ -64,6 +64,8 @@ namespace kinematics {
 			copied_diagram.bodies.push_back(body);
 		}
 
+		copied_diagram.initialize();
+
 		return copied_diagram;
 	}
 
@@ -71,6 +73,18 @@ namespace kinematics {
 		joints.clear(); 
 		links.clear();
 		bodies.clear();
+	}
+
+	void KinematicDiagram::initialize() {
+		// save the initial shape
+		// this information is used to obtain the length between joints
+		for (int i = 0; i < links.size(); ++i) {
+			for (int j = 0; j < links[i]->joints.size(); ++j) {
+				links[i]->original_shape[links[i]->joints[j]->id] = links[i]->joints[j]->pos;
+			}
+		}
+
+		updateBodyAdjacency();
 	}
 
 	void KinematicDiagram::addJoint(boost::shared_ptr<Joint> joint) {
@@ -88,6 +102,15 @@ namespace kinematics {
 		joints[id] = joint;
 	}
 
+	void KinematicDiagram::setJointToLink(boost::shared_ptr<Joint> joint, boost::shared_ptr<Link> link) {
+		link->addJoint(joint);
+		joint->links.push_back(link);
+	}
+
+	boost::shared_ptr<Link> KinematicDiagram::newLink() {
+		return newLink(false);
+	}
+
 	boost::shared_ptr<Link> KinematicDiagram::newLink(bool driver) {
 		int id = 0;
 		if (!links.empty()) {
@@ -97,6 +120,10 @@ namespace kinematics {
 		boost::shared_ptr<Link> link = boost::shared_ptr<Link>(new Link(id, driver));
 		links[id] = link;
 		return link;
+	}
+
+	boost::shared_ptr<Link> KinematicDiagram::addLink(boost::shared_ptr<Joint> joint1, boost::shared_ptr<Joint> joint2) {
+		return addLink(false, joint1, joint2);
 	}
 
 	boost::shared_ptr<Link> KinematicDiagram::addLink(bool driver, boost::shared_ptr<Joint> joint1, boost::shared_ptr<Joint> joint2) {
@@ -116,6 +143,10 @@ namespace kinematics {
 		return link;
 	}
 
+	boost::shared_ptr<Link> KinematicDiagram::addLink(std::vector<boost::shared_ptr<Joint>> joints) {
+		return addLink(false, joints);
+	}
+
 	boost::shared_ptr<Link> KinematicDiagram::addLink(bool driver, std::vector<boost::shared_ptr<Joint>> joints) {
 		int id = 0;
 		if (!links.empty()) {
@@ -131,6 +162,28 @@ namespace kinematics {
 		}
 
 		return link;
+	}
+
+	void KinematicDiagram::addBody(boost::shared_ptr<Joint> joint1, boost::shared_ptr<Joint> joint2, std::vector<glm::dvec2> points) {
+		boost::shared_ptr<BodyGeometry> body = boost::shared_ptr<BodyGeometry>(new BodyGeometry(joint1, joint2));
+
+		// setup rotation matrix
+		glm::vec2 dir = joint2->pos - joint1->pos;
+		double angle = atan2(dir.y, dir.x);
+
+		glm::dvec2 p1 = joint1->pos;
+		glm::dmat4x4 model;
+		model = glm::rotate(model, -angle, glm::dvec3(0, 0, 1));
+
+		for (int i = 0; i < points.size(); ++i) {
+			// convert the coordinates to the local coordinate system
+			glm::dvec2 rotated_p = glm::dvec2(model * glm::dvec4(points[i].x - p1.x, points[i].y - p1.y, 0, 1));
+
+			body->points.push_back(rotated_p);
+		}
+
+		bodies.push_back(body);
+
 	}
 
 	void KinematicDiagram::load(const QString& filename) {
@@ -192,33 +245,20 @@ namespace kinematics {
 						// add a body
 						int id1 = body_node.toElement().attribute("id1").toInt();
 						int id2 = body_node.toElement().attribute("id2").toInt();
-						boost::shared_ptr<BodyGeometry> body = boost::shared_ptr<BodyGeometry>(new BodyGeometry(joints[id1], joints[id2]));
 
-						// setup rotation matrix
-						glm::vec2 dir = joints[id2]->pos - joints[id1]->pos;
-						double angle = atan2(dir.y, dir.x);
-
-						//glm::dvec2 p1 = (diagram.joints[id1]->pos + diagram.joints[id2]->pos) * 0.5;
-						glm::dvec2 p1 = joints[id1]->pos;
-						glm::dmat4x4 model;
-						model = glm::rotate(model, -angle, glm::dvec3(0, 0, 1));
-
+						std::vector<glm::dvec2> points;
 						QDomNode point_node = body_node.firstChild();
 						while (!point_node.isNull()) {
 							if (point_node.toElement().tagName() == "point") {
 								double x = point_node.toElement().attribute("x").toDouble();
 								double y = point_node.toElement().attribute("y").toDouble();
-
-								// convert the coordinates to the local coordinate system
-								glm::dvec2 rotated_p = glm::dvec2(model * glm::dvec4(x - p1.x, y - p1.y, 0, 1));
-
-								body->points.push_back(rotated_p);
+								points.push_back(glm::dvec2(x, y));
 							}
 
 							point_node = point_node.nextSibling();
 						}
 
-						bodies.push_back(body);
+						addBody(joints[id1], joints[id2], points);
 					}
 
 					body_node = body_node.nextSibling();
@@ -229,7 +269,7 @@ namespace kinematics {
 		}
 
 		// initialize the adancency between rigid bodies
-		updateBodyAdjacency();
+		initialize();
 
 		//trace_end_effector.resize(assemblies.size());
 	}

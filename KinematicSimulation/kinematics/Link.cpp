@@ -36,7 +36,6 @@ namespace kinematics {
 
 	void Link::addJoint(boost::shared_ptr<Joint> joint) {
 		joints.push_back(joint);
-		original_shape[joint->id] = joint->pos;
 	}
 
 	void Link::rotate(const glm::dvec2& rotation_center, double angle) {

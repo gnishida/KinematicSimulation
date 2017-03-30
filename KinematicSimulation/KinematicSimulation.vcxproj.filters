@@ -86,7 +86,7 @@
     <ClCompile Include="kinematics\Utils.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="KinematicDiagram.cpp">
+    <ClCompile Include="kinematics\KinematicDiagram.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -132,7 +132,7 @@
     <ClInclude Include="kinematics\Utils.h">
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="KinematicDiagram.h">
+    <ClInclude Include="kinematics\KinematicDiagram.h">
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
   </ItemGroup>
