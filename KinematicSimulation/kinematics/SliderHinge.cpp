@@ -33,7 +33,7 @@ namespace kinematics {
 			}
 		}
 
-		painter.translate(pos.x, 800 - pos.y);
+		painter.translate(pos.x, pos.y);
 		painter.rotate(-theta);
 		painter.drawRect(-20, -5, 40, 10);
 

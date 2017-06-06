@@ -23,7 +23,7 @@ namespace kinematics {
 		painter.save();
 		painter.setPen(QPen(QColor(0, 0, 0), 1));
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
-		painter.drawEllipse(QPoint(pos.x, 800 - pos.y), 5, 5);
+		painter.drawEllipse(QPoint(pos.x, pos.y), 5, 5);
 		painter.restore();
 	}
 

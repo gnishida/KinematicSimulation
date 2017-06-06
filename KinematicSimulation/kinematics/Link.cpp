@@ -87,7 +87,7 @@ namespace kinematics {
 		painter.setBrush(QBrush(QColor(192, 192, 192)));
 		QPolygon polygon;
 		for (int i = 0; i < joints.size(); ++i) {
-			polygon.append(QPoint(joints[i]->pos.x, 800 - joints[i]->pos.y));
+			polygon.append(QPoint(joints[i]->pos.x, joints[i]->pos.y));
 		}
 		painter.drawPolygon(polygon);
 

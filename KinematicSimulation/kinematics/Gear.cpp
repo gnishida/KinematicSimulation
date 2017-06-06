@@ -31,7 +31,7 @@ namespace kinematics {
 		painter.save();
 		painter.setPen(QPen(QColor(0, 0, 0), 1));
 		painter.setBrush(QBrush(QColor(255, 255, 255, 0)));
-		painter.drawEllipse(QPoint(center.x, 800 - center.y), 5, 5);
+		painter.drawEllipse(QPoint(center.x, center.y), 5, 5);
 
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
 
@@ -47,13 +47,13 @@ namespace kinematics {
 			glm::vec2 p4 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * radius;
 			glm::vec2 p5 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * (radius + 4);
 
-			painter.drawLine(p1.x, 800 - p1.y, p2.x, 800 - p2.y);
-			painter.drawLine(p2.x, 800 - p2.y, p3.x, 800 - p3.y);
-			painter.drawLine(p3.x, 800 - p3.y, p4.x, 800 - p4.y);
-			painter.drawLine(p4.x, 800 - p4.y, p5.x, 800 - p5.y);
+			painter.drawLine(p1.x, p1.y, p2.x, p2.y);
+			painter.drawLine(p2.x, p2.y, p3.x, p3.y);
+			painter.drawLine(p3.x, p3.y, p4.x, p4.y);
+			painter.drawLine(p4.x, p4.y, p5.x, p5.y);
 		}
 		
-		painter.drawEllipse(QPoint(pos.x, 800 - pos.y), 5, 5);
+		painter.drawEllipse(QPoint(pos.x, pos.y), 5, 5);
 				
 		painter.restore();
 	}

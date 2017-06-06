@@ -117,10 +117,16 @@ void Canvas::animation_update() {
 	}
 
 	update();
+
 }
 
 void Canvas::paintEvent(QPaintEvent *e) {
 	QPainter painter(this);
+
+	QMatrix m;
+	m.translate(0, height() - 1);
+	m.scale(1, -1);
+	painter.setMatrix(m);
 
 	kinematics.draw(painter);
 }

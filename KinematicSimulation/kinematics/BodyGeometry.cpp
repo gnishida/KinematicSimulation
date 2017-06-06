@@ -40,7 +40,7 @@ namespace kinematics {
 		std::vector<glm::dvec2> actual_points = getActualPoints();
 		QPolygonF pts;
 		for (int k = 0; k < actual_points.size(); ++k) {
-			pts.push_back(QPointF(actual_points[k].x, 800 - actual_points[k].y));
+			pts.push_back(QPointF(actual_points[k].x, actual_points[k].y));
 		}
 		painter.drawPolygon(pts);
 
