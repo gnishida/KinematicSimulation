@@ -83,10 +83,10 @@
     <ClCompile Include="kinematics\SliderHinge.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="kinematics\Utils.cpp">
+    <ClCompile Include="kinematics\KinematicDiagram.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="kinematics\KinematicDiagram.cpp">
+    <ClCompile Include="kinematics\KinematicUtils.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -129,10 +129,10 @@
     <ClInclude Include="kinematics\SliderHinge.h">
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="kinematics\Utils.h">
+    <ClInclude Include="kinematics\KinematicDiagram.h">
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
-    <ClInclude Include="kinematics\KinematicDiagram.h">
+    <ClInclude Include="kinematics\KinematicUtils.h">
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
   </ItemGroup>

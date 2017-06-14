@@ -169,10 +169,10 @@
     <ClCompile Include="kinematics\Joint.cpp" />
     <ClCompile Include="kinematics\KinematicDiagram.cpp" />
     <ClCompile Include="kinematics\Kinematics.cpp" />
+    <ClCompile Include="kinematics\KinematicUtils.cpp" />
     <ClCompile Include="kinematics\Link.cpp" />
     <ClCompile Include="kinematics\PinJoint.cpp" />
     <ClCompile Include="kinematics\SliderHinge.cpp" />
-    <ClCompile Include="kinematics\Utils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
@@ -222,10 +222,10 @@
     <ClInclude Include="kinematics\Joint.h" />
     <ClInclude Include="kinematics\KinematicDiagram.h" />
     <ClInclude Include="kinematics\Kinematics.h" />
+    <ClInclude Include="kinematics\KinematicUtils.h" />
     <ClInclude Include="kinematics\Link.h" />
     <ClInclude Include="kinematics\PinJoint.h" />
     <ClInclude Include="kinematics\SliderHinge.h" />
-    <ClInclude Include="kinematics\Utils.h" />
     <CustomBuild Include="Canvas.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing Canvas.h...</Message>

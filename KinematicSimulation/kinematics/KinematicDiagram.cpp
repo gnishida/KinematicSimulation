@@ -2,7 +2,7 @@
 #include "PinJoint.h"
 #include "SliderHinge.h"
 #include "Gear.h"
-#include "Utils.h"
+#include "KinematicUtils.h"
 #include <QDomDocument>
 #include <QFile>
 #include <QTextStream>
