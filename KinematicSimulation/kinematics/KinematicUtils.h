@@ -6,14 +6,13 @@
 #include <boost/geometry/core/point_type.hpp>
 #include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
-#include <boost/geometry/geometries/register/linestring.hpp>
+#include <boost/geometry/geometries/register/ring.hpp>
 
 namespace kinematics {
 
 	const double M_PI = 3.14159265;
 	const double TOL = 0.0000001;
-
-
+	
 	glm::dvec2 circleCircleIntersection(const glm::dvec2& center1, double radius1, const glm::dvec2& center2, double radius);
 	glm::dvec2 circleCircleIntersection(const glm::dvec2& center1, double radius1, const glm::dvec2& center2, double radius, const glm::dvec2& prev_int);
 	glm::dvec2 circleLineIntersection(const glm::dvec2& center, double radius, const glm::dvec2& p1, const glm::dvec2& p2);
@@ -34,4 +33,4 @@ namespace kinematics {
 }
 
 BOOST_GEOMETRY_REGISTER_POINT_2D(glm::dvec2, double, boost::geometry::cs::cartesian, x, y)
-BOOST_GEOMETRY_REGISTER_LINESTRING(kinematics::polygon)
+BOOST_GEOMETRY_REGISTER_RING(kinematics::polygon)
