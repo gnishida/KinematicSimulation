@@ -10,6 +10,7 @@
 #include "KinematicUtils.h"
 
 namespace kinematics {
+
 	Kinematics::Kinematics() {
 		show_assemblies = true;
 		show_links = true;

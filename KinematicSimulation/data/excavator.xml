@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<design author="Gen Nishida" version="1.0" date="7/3/2017">
+	<joints>
+		<joint id="0" type="pin" x="505" y="151" ground="true"/>
+		<joint id="1" type="pin" x="470" y="129"/>
+		<!--<joint id="2" type="pin" x="312" y="197"/>-->
+		<joint id="2" type="pin" x="332" y="197"/>
+		<joint id="3" type="pin" x="381" y="237" ground="true"/>
+		<joint id="4" type="pin" x="398" y="244"/>
+		<joint id="5" type="pin" x="375" y="238" ground="true"/>
+		<joint id="6" type="pin" x="355" y="318"/>
+		<joint id="7" type="pin" x="444" y="285" ground="true"/>
+		<joint id="8" type="pin" x="309" y="300"/>
+		<joint id="9" type="pin" x="165" y="352"/>
+		<joint id="10" type="pin" x="367" y="245" ground="true"/>
+		<joint id="11" type="pin" x="128" y="354"/>
+		<joint id="12" type="pin" x="135" y="326"/>
+		<joint id="13" type="pin" x="131" y="304"/>
+		<!--<joint id="14" type="pin" x="71" y="369"/>-->
+		<joint id="14" type="pin" x="81" y="359"/>
+		<joint id="15" type="pin" x="40" y="357"/>
+		<!--<joint id="16" type="pin" x="145" y="294"/>-->
+		<!--<joint id="16" type="pin" x="115" y="324"/>-->
+		<joint id="16" type="pin" x="115" y="324"/>
+	</joints>
+	<links>
+		<link joints="0,1" driver="true"/>
+		<link joints="1,2"/>
+		<link joints="2,3,4"/>
+		<link joints="5,6"/>
+		<link joints="7,8"/>
+		<link joints="4,8"/>
+		<link joints="10,11"/>
+		<link joints="11,12,16"/>
+		<link joints="6,8,9,12,13"/>
+		<link joints="13,14"/>
+		<link joints="9,15"/>
+		<link joints="14,15"/>
+		<link joints="14,16"/>
+	</links>
+	<bodies>
+		<body id1="0" id2="3">
+			<point x="368" y="259"/>
+			<point x="392" y="282"/>
+			<point x="494" y="287"/>
+			<point x="532" y="190"/>
+			<point x="670" y="186"/>
+			<point x="671" y="98"/>
+			<point x="526" y="95"/>
+			<point x="527" y="74"/>
+			<point x="649" y="73"/>
+			<point x="654" y="36"/>
+			<point x="363" y="31"/>
+			<point x="363" y="63"/>
+			<point x="471" y="68"/>
+			<point x="475" y="95"/>
+			<point x="359" y="111"/>
+		</body>
+		<body id1="6" id2="8">
+			<point x="102" y="355"/>
+			<point x="269" y="368"/>
+			<point x="296" y="362"/>
+			<point x="372" y="315"/>
+			<point x="331" y="280"/>
+			<point x="276" y="322"/>
+			<point x="137" y="320"/>
+			<point x="97" y="349"/>
+		</body>
+		<body id1="14" id2="15">
+			<point x="38" y="363"/>
+			<point x="62" y="384"/>
+			<point x="71" y="379"/>
+			<point x="92" y="325"/>
+			<point x="115" y="214"/>
+			<point x="105" y="197"/>
+			<point x="55" y="215"/>
+			<point x="37" y="284"/>
+		</body>
+	</bodies>
+</design>

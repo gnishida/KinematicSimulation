@@ -24,15 +24,18 @@ namespace kinematics {
 		for (int i = 0; i < joints.size(); ++i) {
 			if (joints[i]->type == Joint::TYPE_PIN) {
 				boost::shared_ptr<Joint> joint = boost::shared_ptr<Joint>(new PinJoint(joints[i]->id, joints[i]->ground, joints[i]->pos));
+				joint->determined = joints[i]->determined;
 				copied_diagram.addJoint(joint);
 			}
 			else if (joints[i]->type == Joint::TYPE_SLIDER_HINGE) {
 				boost::shared_ptr<Joint> joint = boost::shared_ptr<Joint>(new SliderHinge(joints[i]->id, joints[i]->ground, joints[i]->pos));
+				joint->determined = joints[i]->determined;
 				copied_diagram.addJoint(joint);
 			}
 			else if (joints[i]->type == Joint::TYPE_GEAR) {
 				boost::shared_ptr<Gear> gear = boost::static_pointer_cast<Gear>(joints[i]);
 				boost::shared_ptr<Joint> joint = boost::shared_ptr<Joint>(new Gear(gear->id, gear->ground, gear->pos, gear->radius, gear->speed, gear->phase));
+				joint->determined = joints[i]->determined;
 				copied_diagram.addJoint(joint);
 			}
 		}
@@ -45,6 +48,12 @@ namespace kinematics {
 			}
 
 			copied_diagram.addLink(links[i]->driver, copied_joints);
+		}
+
+		// copy the original shape of the links
+		for (int i = 0; i < links.size(); ++i) {
+			copied_diagram.links[i]->original_shape = links[i]->original_shape;
+			copied_diagram.links[i]->angle = links[i]->angle;
 		}
 
 		// copy bodis
@@ -64,8 +73,6 @@ namespace kinematics {
 			copied_diagram.bodies.push_back(body);
 		}
 
-		copied_diagram.initialize();
-
 		return copied_diagram;
 	}
 
@@ -81,6 +88,9 @@ namespace kinematics {
 		for (int i = 0; i < links.size(); ++i) {
 			for (int j = 0; j < links[i]->joints.size(); ++j) {
 				links[i]->original_shape[links[i]->joints[j]->id] = links[i]->joints[j]->pos;
+			}
+			if (links[i]->joints.size() >= 2) {
+				links[i]->angle = atan2(links[i]->joints[1]->pos.y - links[i]->joints[0]->pos.y, links[i]->joints[1]->pos.x - links[i]->joints[0]->pos.x);
 			}
 		}
 
