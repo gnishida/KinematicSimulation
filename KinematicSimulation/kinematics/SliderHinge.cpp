@@ -19,7 +19,7 @@ namespace kinematics {
 		pos.y = node.attribute("y").toDouble();
 	}
 
-	void SliderHinge::draw(QPainter& painter) {
+	void SliderHinge::draw(QPainter& painter, const QPoint& origin, float scale) {
 		painter.save();
 		painter.setPen(QPen(QColor(0, 0, 0), 1));
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
@@ -33,9 +33,9 @@ namespace kinematics {
 			}
 		}
 
-		painter.translate(pos.x, pos.y);
+		painter.translate(origin.x() + pos.x * scale, origin.y() - pos.y * scale);
 		painter.rotate(-theta);
-		painter.drawRect(-20, -5, 40, 10);
+		painter.drawRect(-20 * scale, -5 * scale, 40 * scale, 10 * scale);
 
 		painter.drawEllipse(QPoint(0, 0), 5, 5);
 		painter.restore();

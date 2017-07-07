@@ -80,14 +80,19 @@ namespace kinematics {
 		return mat * glm::dvec3(original_shape[joint_id], 1);
 	}
 
-	void Link::draw(QPainter& painter) {
+	void Link::draw(QPainter& painter, const QPoint& origin, float scale) {
 		painter.save();
 
-		painter.setPen(QPen(QColor(0, 0, 0), 3));
+		if (driver) {
+			painter.setPen(QPen(QColor(0, 0, 0), 3));
+		}
+		else {
+			painter.setPen(QPen(QColor(90, 90, 90), 3));
+		}
 		painter.setBrush(QBrush(QColor(192, 192, 192, 128)));
 		QPolygon polygon;
 		for (int i = 0; i < joints.size(); ++i) {
-			polygon.append(QPoint(joints[i]->pos.x, joints[i]->pos.y));
+			polygon.append(QPoint(origin.x() + joints[i]->pos.x * scale, origin.y() - joints[i]->pos.y * scale));
 		}
 		painter.drawPolygon(polygon);
 

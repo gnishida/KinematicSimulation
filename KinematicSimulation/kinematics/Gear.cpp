@@ -27,11 +27,11 @@ namespace kinematics {
 		pos = center + glm::dvec2(cos(phase), sin(phase)) * radius;
 	}
 
-	void Gear::draw(QPainter& painter) {
+	void Gear::draw(QPainter& painter, const QPoint& origin, float scale) {
 		painter.save();
 		painter.setPen(QPen(QColor(0, 0, 0), 1));
 		painter.setBrush(QBrush(QColor(255, 255, 255, 0)));
-		painter.drawEllipse(QPoint(center.x, center.y), 5, 5);
+		painter.drawEllipse(QPoint(origin.x() + center.x * scale, origin.y() - center.y * scale), 5, 5);
 
 		painter.setBrush(QBrush(QColor(255, 255, 255)));
 
@@ -47,14 +47,14 @@ namespace kinematics {
 			glm::vec2 p4 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * radius;
 			glm::vec2 p5 = center + glm::dvec2(cos(phase + theta3), sin(phase + theta3)) * (radius + 4);
 
-			painter.drawLine(p1.x, p1.y, p2.x, p2.y);
-			painter.drawLine(p2.x, p2.y, p3.x, p3.y);
-			painter.drawLine(p3.x, p3.y, p4.x, p4.y);
-			painter.drawLine(p4.x, p4.y, p5.x, p5.y);
+			painter.drawLine(origin.x() + p1.x * scale, origin.y() - p1.y * scale, origin.x() + p2.x * scale, origin.y() - p2.y * scale);
+			painter.drawLine(origin.x() + p2.x * scale, origin.y() - p2.y * scale, origin.x() + p3.x * scale, origin.y() - p3.y * scale);
+			painter.drawLine(origin.x() + p3.x * scale, origin.y() - p3.y * scale, origin.x() + p4.x * scale, origin.y() - p4.y * scale);
+			painter.drawLine(origin.x() + p4.x * scale, origin.y() - p4.y * scale, origin.x() + p5.x * scale, origin.y() - p5.y * scale);
 		}
 		
-		painter.drawEllipse(QPoint(pos.x, pos.y), 5, 5);
-				
+		painter.drawEllipse(QPointF(origin.x() + pos.x * scale, origin.y() - pos.y * scale), 5 * scale, 5 * scale);
+
 		painter.restore();
 	}
 

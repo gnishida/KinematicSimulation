@@ -385,22 +385,22 @@ namespace kinematics {
 		return false;
 	}
 
-	void KinematicDiagram::draw(QPainter& painter, bool show_bodies, bool show_links) const {
+	void KinematicDiagram::draw(QPainter& painter, const QPoint& origin, float scale, bool show_bodies, bool show_links) const {
 		if (show_bodies) {
 			for (int i = 0; i < bodies.size(); ++i) {
-				bodies[i]->draw(painter);
+				bodies[i]->draw(painter, origin, scale);
 			}
 		}
 
 		if (show_links) {
 			// draw links
 			for (int i = 0; i < links.size(); ++i) {
-				links[i]->draw(painter);
+				links[i]->draw(painter, origin, scale);
 			}
 
 			// draw joints
 			for (auto it = joints.begin(); it != joints.end(); ++it) {
-				joints[it.key()]->draw(painter);
+				joints[it.key()]->draw(painter, origin, scale);
 			}
 		}
 	}

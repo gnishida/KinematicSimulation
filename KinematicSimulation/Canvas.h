@@ -18,7 +18,9 @@ public:
 	kinematics::Kinematics kinematics;
 	QTimer* animation_timer;
 	float simulation_speed;
-	glm::vec2 prev_mouse_pt;
+	QPoint prev_mouse_pt;
+	QPoint origin;
+	double scale;
 
 public:
 	Canvas(QWidget *parent = NULL);
@@ -46,6 +48,7 @@ protected:
 	void mouseMoveEvent(QMouseEvent* e);
 	void mouseReleaseEvent(QMouseEvent* e);
 	void mouseDoubleClickEvent(QMouseEvent* e);
+	void wheelEvent(QWheelEvent* e);
 	void resizeEvent(QResizeEvent *e);
 
 public:

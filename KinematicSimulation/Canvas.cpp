@@ -13,6 +13,8 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	ctrlPressed = false;
 	shiftPressed = false;
 
+	origin = QPoint(0, height());
+	scale = 1.0;
 	animation_timer = NULL;
 	simulation_speed = 0.01;
 }
@@ -123,47 +125,41 @@ void Canvas::animation_update() {
 void Canvas::paintEvent(QPaintEvent *e) {
 	QPainter painter(this);
 
-	QMatrix m;
-	m.translate(0, height() - 1);
-	m.scale(1, -1);
-	painter.setMatrix(m);
+	// draw axes
+	painter.save();
+	painter.setPen(QPen(QColor(128, 128, 128), 1, Qt::DashLine));
+	painter.drawLine(-10000 * scale + origin.x(), origin.y(), 10000 * scale + origin.y(), origin.y());
+	painter.drawLine(origin.x(), 10000 * scale + origin.y(), origin.x(), -10000 * scale + origin.y());
+	painter.restore();
 
-	kinematics.draw(painter);
+	kinematics.draw(painter, origin, scale);
 }
 
 void Canvas::mousePressEvent(QMouseEvent* e) {
-	/*
-	// hit test against gears
-	for (int i = 0; i < kinematics.assemblies.size(); ++i) {
-		for (int j = 0; j < kinematics.assemblies[i]->gears.size(); ++j) {
-			double dist = glm::length(kinematics.assemblies[i]->gears[j].center - glm::dvec2(e->x(), e->y()));
-			if (dist <= kinematics.assemblies[i]->gears[j].radius) {
-				// select this gear
-				selected_gear = &kinematics.assemblies[i]->gears[j];
-				prev_mouse_pt = glm::vec2(e->x(), e->y());
-				break;
-			}
-		}
-	}
-	*/
+	prev_mouse_pt = e->pos();
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent* e) {
-	/*
-	if (selected_gear != NULL) {
-		// move this gear
-		selected_gear->center += glm::vec2(e->x(), e->y()) - prev_mouse_pt;
-		prev_mouse_pt = glm::vec2(e->x(), e->y());
+	// move the camera
+	if (e->buttons() & Qt::RightButton) {
+		// translate the Origin
+		origin += e->pos() - prev_mouse_pt;
 		update();
 	}
-	*/
+
+	prev_mouse_pt = e->pos();
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent* e) {
-	//selected_gear = NULL;
 }
 
 void Canvas::mouseDoubleClickEvent(QMouseEvent* e) {
+}
+
+void Canvas::wheelEvent(QWheelEvent* e) {
+	scale += e->delta() * 0.001;
+	scale = std::min(std::max(0.1, scale), 1000.0);
+	update();
 }
 
 void Canvas::resizeEvent(QResizeEvent *e) {
