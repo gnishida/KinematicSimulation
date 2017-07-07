@@ -91,6 +91,7 @@ namespace kinematics {
 			int link2;
 			std::vector<double> lengths2;
 			std::vector<int> pts_indices;
+			std::vector<glm::dvec2> prev_positions;
 
 			for (int i = 0; i < links.size(); ++i) {
 				for (int j = 0; j < links[i]->joints.size(); ++j) {
@@ -125,6 +126,7 @@ namespace kinematics {
 								lengths.push_back(links[i]->joints[j]->links[k]->getLength(links[i]->joints[j]->id, links[i]->joints[j]->links[k]->joints[l]->id));
 								lengths2.push_back(links[i]->getLength(links[i]->joints[j]->id, id));
 								pts_indices.push_back(links[i]->joints[j]->id);
+								prev_positions.push_back(links[i]->joints[j]->pos);
 
 								// to exit the loop
 								k = links[i]->joints[j]->links.size();
@@ -143,7 +145,7 @@ namespace kinematics {
 			if (lengths2.size() == 2) {
 				lengths2.push_back(glm::length(links[link2]->original_shape[pts_indices[0]] - links[link2]->original_shape[pts_indices[1]]));
 
-				pos = kinematics::threeLengths(positions[0], lengths[0], positions[1], lengths[1], positions[2], lengths[2], lengths2[0], lengths2[1], lengths2[2], pos, links[link2]->original_shape[pts_indices[0]], links[link2]->original_shape[pts_indices[1]]);
+				pos = kinematics::threeLengths(positions[0], lengths[0], positions[1], lengths[1], positions[2], lengths[2], lengths2[0], lengths2[1], lengths2[2], pos, prev_positions[0], prev_positions[1]);
 				determined = true;
 				return true;
 			}
