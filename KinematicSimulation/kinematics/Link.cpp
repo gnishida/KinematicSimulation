@@ -6,11 +6,13 @@ namespace kinematics {
 
 	Link::Link(int id) {
 		this->id = id;
+		this->angle = 0;
 		this->driver = false;
 	}
 
 	Link::Link(int id, bool driver) {
 		this->id = id;
+		this->angle = 0;
 		this->driver = driver;
 	}
 
@@ -36,12 +38,17 @@ namespace kinematics {
 
 	void Link::addJoint(boost::shared_ptr<Joint> joint) {
 		joints.push_back(joint);
+		if (joints.size() == 2) {
+			// initialize the link angle
+			angle = atan2(joints[1]->pos.y - joints[0]->pos.y, joints[1]->pos.x - joints[0]->pos.x);
+		}
 	}
 
 	void Link::rotate(const glm::dvec2& rotation_center, double angle) {
 		for (int i = 0; i < joints.size(); ++i) {
 			joints[i]->rotate(rotation_center, angle);
 		}
+		this->angle += angle;
 	}
 
 	double Link::getLength(int joint_id1, int joint_id2) {
@@ -89,7 +96,7 @@ namespace kinematics {
 		else {
 			painter.setPen(QPen(QColor(90, 90, 90), 3));
 		}
-		painter.setBrush(QBrush(QColor(192, 192, 192, 128)));
+		painter.setBrush(QBrush(QColor(192, 192, 192, 64)));
 		QPolygon polygon;
 		for (int i = 0; i < joints.size(); ++i) {
 			polygon.append(QPoint(origin.x() + joints[i]->pos.x * scale, origin.y() - joints[i]->pos.y * scale));
