@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<design author="Gen Nishida" version="1.0" date="7/17/2017">
+	<joints>
+		<joint id="0" type="pin" x="0" y="0" ground="true"/>
+		<joint id="1" type="pin" x="5" y="-2" ground="true"/>
+		<joint id="2" type="pin" x="18" y="5"/>
+		<joint id="3" type="slider_hinge" x="14" y="-2"/>
+	</joints>
+	<links>
+		<link joints="0,2" driver="true"/>
+		<link joints="1,3"/>
+		<link joints="2,3"/>
+	</links>
+</design>

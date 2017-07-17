@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	
 	setCentralWidget(&canvas);
 
+	ui.actionCollisionCheck->setChecked(canvas.collision_check);
+
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(onOpen()));
 	connect(ui.actionSave, SIGNAL(triggered()), this, SLOT(onSave()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -17,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(ui.actionInvertSpeed, SIGNAL(triggered()), this, SLOT(onInvertSpeed()));
 	connect(ui.actionStepForward, SIGNAL(triggered()), this, SLOT(onStepForward()));
 	connect(ui.actionStepBackward, SIGNAL(triggered()), this, SLOT(onStepBackward()));
+	connect(ui.actionCollisionCheck, SIGNAL(triggered()), this, SLOT(onCollisionCheck()));
 }
 
 MainWindow::~MainWindow() {
@@ -69,4 +72,8 @@ void MainWindow::onStepForward() {
 
 void MainWindow::onStepBackward() {
 	canvas.stepBackward();
+}
+
+void MainWindow::onCollisionCheck() {
+	canvas.collision_check = ui.actionCollisionCheck->isChecked();
 }

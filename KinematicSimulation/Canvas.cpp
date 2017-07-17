@@ -17,6 +17,7 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	scale = 1.0;
 	animation_timer = NULL;
 	simulation_speed = 0.01;
+	collision_check = true;
 }
 
 Canvas::~Canvas() {
@@ -67,7 +68,7 @@ void Canvas::invertSpeed() {
 void Canvas::stepForward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepForward(simulation_speed);
+			kinematics.stepForward(simulation_speed, collision_check);
 		}
 		catch (char* ex) {
 			simulation_speed = -simulation_speed;
@@ -81,7 +82,7 @@ void Canvas::stepForward() {
 void Canvas::stepBackward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepForward(-simulation_speed);
+			kinematics.stepForward(-simulation_speed, collision_check);
 		}
 		catch (char* ex) {
 			simulation_speed = -simulation_speed;
@@ -109,7 +110,7 @@ void Canvas::showBodies(bool flag) {
 
 void Canvas::animation_update() {
 	try {
-		kinematics.stepForward(simulation_speed);
+		kinematics.stepForward(simulation_speed, collision_check);
 	}
 	catch (char* ex) {
 		simulation_speed = -simulation_speed;

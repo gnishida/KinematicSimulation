@@ -27,6 +27,7 @@ public slots:
 	void onInvertSpeed();
 	void onStepForward();
 	void onStepBackward();
+	void onCollisionCheck();
 };
 
 #endif // MAINWINDOW_H

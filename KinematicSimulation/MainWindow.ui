@@ -44,6 +44,8 @@
     <addaction name="separator"/>
     <addaction name="actionStepForward"/>
     <addaction name="actionStepBackward"/>
+    <addaction name="separator"/>
+    <addaction name="actionCollisionCheck"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSimulation"/>
@@ -128,6 +130,14 @@
   <action name="actionInvertSpeed">
    <property name="text">
     <string>Invert Speed</string>
+   </property>
+  </action>
+  <action name="actionCollisionCheck">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Collision Check</string>
    </property>
   </action>
  </widget>

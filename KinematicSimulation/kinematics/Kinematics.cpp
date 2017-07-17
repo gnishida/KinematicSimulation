@@ -29,7 +29,7 @@ namespace kinematics {
 		diagram.save(filename);
 	}
 
-	void Kinematics::forwardKinematics() {
+	void Kinematics::forwardKinematics(bool collision_check) {
 		std::list<boost::shared_ptr<Joint>> queue;
 
 		// put the joints whose position has not been determined into the queue
@@ -52,12 +52,12 @@ namespace kinematics {
 			}
 		}
 
-		if (isCollided()) {
+		if (collision_check && isCollided()) {
 			throw "collision is detected.";
 		}
 	}
 
-	void Kinematics::stepForward(double time_step) {
+	void Kinematics::stepForward(double time_step, bool collision_check) {
 		// save the current state
 		KinematicDiagram prev_state = diagram.clone();
 
@@ -82,7 +82,7 @@ namespace kinematics {
 
 		if (driver_exist) {
 			try {
-				forwardKinematics();
+				forwardKinematics(collision_check);
 			}
 			catch (char* ex) {
 				int a = 0;

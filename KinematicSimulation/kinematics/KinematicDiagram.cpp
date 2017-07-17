@@ -282,6 +282,13 @@ namespace kinematics {
 		initialize();
 
 		//trace_end_effector.resize(assemblies.size());
+
+		//// DEBUG ////
+		std::cout << "Link lengths:" << std::endl;
+		std::cout << "g=" << glm::length(joints[0]->pos - joints[1]->pos) << std::endl;
+		std::cout << "a=" << glm::length(joints[0]->pos - joints[2]->pos) << std::endl;
+		std::cout << "b=" << glm::length(joints[1]->pos - joints[3]->pos) << std::endl;
+		std::cout << "h=" << glm::length(joints[2]->pos - joints[3]->pos) << std::endl;
 	}
 
 	void KinematicDiagram::save(const QString& filename) {

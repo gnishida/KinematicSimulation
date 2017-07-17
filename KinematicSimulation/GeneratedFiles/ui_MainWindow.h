@@ -37,6 +37,7 @@ public:
     QAction *actionSpeedUp;
     QAction *actionSpeedDown;
     QAction *actionInvertSpeed;
+    QAction *actionCollisionCheck;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -71,6 +72,9 @@ public:
         actionSpeedDown->setObjectName(QStringLiteral("actionSpeedDown"));
         actionInvertSpeed = new QAction(MainWindowClass);
         actionInvertSpeed->setObjectName(QStringLiteral("actionInvertSpeed"));
+        actionCollisionCheck = new QAction(MainWindowClass);
+        actionCollisionCheck->setObjectName(QStringLiteral("actionCollisionCheck"));
+        actionCollisionCheck->setCheckable(true);
         centralWidget = new QWidget(MainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         MainWindowClass->setCentralWidget(centralWidget);
@@ -103,6 +107,8 @@ public:
         menuSimulation->addSeparator();
         menuSimulation->addAction(actionStepForward);
         menuSimulation->addAction(actionStepBackward);
+        menuSimulation->addSeparator();
+        menuSimulation->addAction(actionCollisionCheck);
 
         retranslateUi(MainWindowClass);
 
@@ -129,6 +135,7 @@ public:
         actionSpeedDown->setText(QApplication::translate("MainWindowClass", "Speed Down", 0));
         actionSpeedDown->setShortcut(QApplication::translate("MainWindowClass", "Down", 0));
         actionInvertSpeed->setText(QApplication::translate("MainWindowClass", "Invert Speed", 0));
+        actionCollisionCheck->setText(QApplication::translate("MainWindowClass", "Collision Check", 0));
         menuFile->setTitle(QApplication::translate("MainWindowClass", "File", 0));
         menuSimulation->setTitle(QApplication::translate("MainWindowClass", "Simulation", 0));
     } // retranslateUi

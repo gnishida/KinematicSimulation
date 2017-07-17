@@ -35,7 +35,7 @@ namespace kinematics {
 
 		painter.translate(origin.x() + pos.x * scale, origin.y() - pos.y * scale);
 		painter.rotate(-theta);
-		painter.drawRect(-20 * scale, -5 * scale, 40 * scale, 10 * scale);
+		painter.drawRect(-20, -5, 40, 10);
 
 		painter.drawEllipse(QPoint(0, 0), 5, 5);
 		painter.restore();
@@ -64,6 +64,7 @@ namespace kinematics {
 				if (links[i]->joints[j]->determined) {
 					positions.push_back(links[i]->joints[j]->pos);
 					lengths.push_back(links[i]->getLength(links[i]->joints[j]->id, id));
+					break;
 				}
 			}
 		}

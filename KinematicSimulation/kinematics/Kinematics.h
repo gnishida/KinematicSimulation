@@ -27,8 +27,8 @@ namespace kinematics {
 
 		void load(const QString& filename);
 		void save(const QString& filename);
-		void forwardKinematics();
-		void stepForward(double time_step);
+		void forwardKinematics(bool collision_chec);
+		void stepForward(double time_step, bool collision_chec);
 		bool isCollided();
 		void draw(QPainter& painter, const QPoint& origin, float scale) const;
 		void showAssemblies(bool flag);
