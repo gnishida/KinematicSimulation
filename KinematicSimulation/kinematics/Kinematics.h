@@ -30,7 +30,7 @@ namespace kinematics {
 		void forwardKinematics(bool collision_chec);
 		void stepForward(double time_step, bool collision_chec);
 		bool isCollided();
-		void draw(QPainter& painter, const QPoint& origin, float scale) const;
+		void draw(QPainter& painter, const QPointF& origin, float scale) const;
 		void showAssemblies(bool flag);
 		void showLinks(bool flag);
 		void showBodies(bool flag);

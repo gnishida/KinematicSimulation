@@ -1,6 +1,14 @@
 #include "KinematicUtils.h"
 
 namespace kinematics {
+	
+	double genRand() {
+		return rand() / (float(RAND_MAX) + 1);
+	}
+
+	double genRand(double a, double b) {
+		return genRand() * (b - a) + a;
+	}
 
 	/**
 	* Find the intersection on the right if you look at cener 2 from center 1.
@@ -176,6 +184,25 @@ namespace kinematics {
 		return true;
 	}
 
+	glm::dvec2 circleCenterFromThreePoints(const glm::dvec2& a, const glm::dvec2& b, const glm::dvec2& c) {
+		glm::dvec2 m1 = (a + b) * 0.5;
+		glm::dvec2 v1 = b - a;
+		v1 /= glm::length(v1);
+		glm::dvec2 h1(-v1.y, v1.x);
+
+		glm::dvec2 m2 = (b + c) * 0.5;
+		glm::dvec2 v2 = c - b;
+		v2 /= glm::length(v2);
+		glm::dvec2 h2(-v2.y, v2.x);
+
+		glm::dvec2 intPt;
+		if (!lineLineIntersection(m1, h1, m2, h2, intPt)) {
+			throw "No circle center";
+		}
+
+		return intPt;
+	}
+
 	/**
 	 * Given three points, a, b, and c, find the coordinates of point p1, such that
 	 * length a-p1 is l0, length b-p2 is l1, length c-p3 is l2, length p1-p2 is r0, length p1-p3 is r1, length p2-p3 is r2.
@@ -296,8 +323,8 @@ namespace kinematics {
 	}
 
 	/**
-	* Given that he point p1 goes to p2, and the point q1 goes to q2,
-	* return the transformation matrix for this.
+	* Given that point p1 goes to p2, and the point q1 goes to q2,
+	* return the matrix for this transformation.
 	*/
 	glm::dmat3x3 affineTransform(const glm::dvec2& p1, const glm::dvec2& p2, const glm::dvec2& q1, const glm::dvec2& q2) {
 		double theta1 = atan2(q1.y - p1.y, q1.x - p1.x);
