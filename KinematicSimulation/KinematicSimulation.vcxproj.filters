@@ -89,6 +89,9 @@
     <ClCompile Include="kinematics\KinematicUtils.cpp">
       <Filter>Source Files\kinematics</Filter>
     </ClCompile>
+    <ClCompile Include="kinematics\BBox.cpp">
+      <Filter>Source Files\kinematics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -133,6 +136,9 @@
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
     <ClInclude Include="kinematics\KinematicUtils.h">
+      <Filter>Source Files\kinematics</Filter>
+    </ClInclude>
+    <ClInclude Include="kinematics\BBox.h">
       <Filter>Source Files\kinematics</Filter>
     </ClInclude>
   </ItemGroup>

@@ -16,7 +16,6 @@ Canvas::Canvas(QWidget *parent) : QWidget(parent) {
 	origin = QPoint(0, height());
 	scale = 1.0;
 	animation_timer = NULL;
-	simulation_speed = 0.01;
 	collision_check = true;
 }
 
@@ -25,10 +24,6 @@ Canvas::~Canvas() {
 
 void Canvas::open(const QString& filename) {
 	kinematics.load(filename);
-
-	// Since the direction of the speed might be inverted due to the dead zone,
-	// we need to recover the original speed when a new object is loaded.
-	simulation_speed = 0.01;
 
 	update();
 }
@@ -54,24 +49,24 @@ void Canvas::stop() {
 }
 
 void Canvas::speedUp() {
-	simulation_speed *= 2;
+	kinematics.speedUp();
 }
 
 void Canvas::speedDown() {
-	simulation_speed *= 0.5;
+	kinematics.speedDown();
 }
 
 void Canvas::invertSpeed() {
-	simulation_speed = -simulation_speed;
+	kinematics.invertSpeed();
 }
 
 void Canvas::stepForward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepForward(simulation_speed, collision_check);
+			kinematics.stepForward(collision_check);
 		}
 		catch (char* ex) {
-			simulation_speed = -simulation_speed;
+			kinematics.invertSpeed();
 			std::cerr << "Animation is stopped by error:" << std::endl;
 			std::cerr << ex << std::endl;
 		}
@@ -82,10 +77,10 @@ void Canvas::stepForward() {
 void Canvas::stepBackward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepForward(-simulation_speed, collision_check);
+			kinematics.stepForward(collision_check);
 		}
 		catch (char* ex) {
-			simulation_speed = -simulation_speed;
+			kinematics.invertSpeed();
 			std::cerr << "Animation is stopped by error:" << std::endl;
 			std::cerr << ex << std::endl;
 		}
@@ -110,10 +105,10 @@ void Canvas::showBodies(bool flag) {
 
 void Canvas::animation_update() {
 	try {
-		kinematics.stepForward(simulation_speed, collision_check);
+		kinematics.stepForward(collision_check);
 	}
 	catch (char* ex) {
-		simulation_speed = -simulation_speed;
+		kinematics.invertSpeed();
 		//stop();
 		std::cerr << "Animation is stopped by error:" << std::endl;
 		std::cerr << ex << std::endl;

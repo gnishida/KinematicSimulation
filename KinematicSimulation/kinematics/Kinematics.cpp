@@ -11,10 +11,16 @@
 
 namespace kinematics {
 
-	Kinematics::Kinematics() {
+	Kinematics::Kinematics(double simulation_speed) {
+		this->simulation_speed = simulation_speed;
 		show_assemblies = true;
 		show_links = true;
 		show_bodies = true;
+	}
+
+	void Kinematics::clear() {
+		diagram.clear();
+		trace_end_effector.clear();
 	}
 
 	void Kinematics::load(const QString& filename) {
@@ -57,9 +63,12 @@ namespace kinematics {
 		}
 	}
 
-	void Kinematics::stepForward(double time_step, bool collision_check) {
+	void Kinematics::stepForward(bool collision_check, bool need_recovery_for_collision) {
 		// save the current state
-		KinematicDiagram prev_state = diagram.clone();
+		KinematicDiagram prev_state;
+		if (need_recovery_for_collision) {
+			prev_state = diagram.clone();
+		}
 
 		// clear the determined flag of joints
 		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
@@ -76,7 +85,7 @@ namespace kinematics {
 		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
 			if (diagram.joints[it.key()]->ground) {
 				driver_exist = true;
-				diagram.joints[it.key()]->stepForward(time_step);
+				diagram.joints[it.key()]->stepForward(simulation_speed);
 			}
 		}
 
@@ -85,8 +94,48 @@ namespace kinematics {
 				forwardKinematics(collision_check);
 			}
 			catch (char* ex) {
-				int a = 0;
-				diagram = prev_state.clone();
+				if (need_recovery_for_collision) {
+					diagram = prev_state.clone();
+				}
+				throw ex;
+			}
+		}
+	}
+
+	void Kinematics::stepBackward(bool collision_check, bool need_recovery_for_collision) {
+		// save the current state
+		KinematicDiagram prev_state;
+		if (need_recovery_for_collision) {
+			prev_state = diagram.clone();
+		}
+
+		// clear the determined flag of joints
+		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
+			if (diagram.joints[it.key()]->ground) {
+				diagram.joints[it.key()]->determined = true;
+			}
+			else {
+				diagram.joints[it.key()]->determined = false;
+			}
+		}
+
+		// update the positions of the joints by the driver
+		bool driver_exist = false;
+		for (auto it = diagram.joints.begin(); it != diagram.joints.end(); ++it) {
+			if (diagram.joints[it.key()]->ground) {
+				driver_exist = true;
+				diagram.joints[it.key()]->stepForward(-simulation_speed);
+			}
+		}
+
+		if (driver_exist) {
+			try {
+				forwardKinematics(collision_check);
+			}
+			catch (char* ex) {
+				if (need_recovery_for_collision) {
+					diagram = prev_state.clone();
+				}
 				throw ex;
 			}
 		}
@@ -98,6 +147,18 @@ namespace kinematics {
 
 	void Kinematics::draw(QPainter& painter, const QPointF& origin, float scale) const {
 		diagram.draw(painter, origin, scale, show_bodies, show_links);
+	}
+
+	void Kinematics::speedUp() {
+		simulation_speed *= 2.0;
+	}
+
+	void Kinematics::speedDown() {
+		simulation_speed *= 0.5;
+	}
+
+	void Kinematics::invertSpeed() {
+		simulation_speed = -simulation_speed;
 	}
 
 	void Kinematics::showAssemblies(bool flag) {

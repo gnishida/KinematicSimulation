@@ -17,7 +17,6 @@ public:
 
 	kinematics::Kinematics kinematics;
 	QTimer* animation_timer;
-	float simulation_speed;
 	bool collision_check;
 	QPoint prev_mouse_pt;
 	QPoint origin;
