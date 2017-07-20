@@ -28,6 +28,29 @@ namespace kinematics {
 
 		diagram.load(filename);
 
+		//// DEBUG
+		std::cout << "---------------------------" << std::endl;
+		double e = diagram.joints[0]->pos.y - diagram.joints[1]->pos.y;
+		double r = glm::length(diagram.joints[0]->pos - diagram.joints[2]->pos);
+		double L = glm::length(diagram.joints[3]->pos - diagram.joints[2]->pos);
+		std::cout << "e = " << e << std::endl;
+		std::cout << "r = " << r << std::endl;
+		std::cout << "L = " << L << std::endl;
+		std::cout << "S1 = " << L - r + e << std::endl;
+		std::cout << "S2 = " << L - r - e << std::endl;
+		if (L - r + e >= 0 && L - r - e >= 0) {
+			std::cout << "  [rotatable crank]" << std::endl;
+		}
+		else if (L - r + e >= 0 && L - r - e < 0) {
+			std::cout << "  [0-rocker]" << std::endl;
+		}
+		else if (L - r + e < 0 && L - r - e >= 0) {
+			std::cout << "  [pi-rocker]" << std::endl;
+		}
+		else {
+			std::cout << "  [rocker]" << std::endl;
+		}
+
 		//trace_end_effector.resize(assemblies.size());
 	}
 

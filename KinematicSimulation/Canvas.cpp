@@ -77,7 +77,7 @@ void Canvas::stepForward() {
 void Canvas::stepBackward() {
 	if (animation_timer == NULL) {
 		try {
-			kinematics.stepForward(collision_check);
+			kinematics.stepBackward(collision_check);
 		}
 		catch (char* ex) {
 			kinematics.invertSpeed();
