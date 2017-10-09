@@ -176,6 +176,13 @@ void Canvas::keyPressEvent(QKeyEvent* e) {
 	case Qt::Key_Escape:
 		break;
 	case Qt::Key_Space:
+		// start/stop the animation
+		if (animation_timer == NULL) {
+			run();
+		}
+		else {
+			stop();
+		}
 		break;
 	case Qt::Key_Delete:
 		break;

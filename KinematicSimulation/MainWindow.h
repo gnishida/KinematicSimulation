@@ -17,6 +17,9 @@ public:
 	MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+	void keyPressEvent(QKeyEvent* e);
+	void keyReleaseEvent(QKeyEvent* e);
+
 public slots:
 	void onOpen();
 	void onSave();

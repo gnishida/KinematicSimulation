@@ -46,6 +46,14 @@ void MainWindow::onSave() {
 	canvas.save(filename);
 }
 
+void MainWindow::keyPressEvent(QKeyEvent* e) {
+	canvas.keyPressEvent(e);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent* e) {
+	canvas.keyReleaseEvent(e);
+}
+
 void MainWindow::onSimulationStart() {
 	canvas.run();
 }
